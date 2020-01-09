@@ -310,7 +310,7 @@ def start_screen():
         if k == 0:
             intro_rect.x = 100
             text_coord += 80
-        elif k == 1:
+        elif k == 1 or k == 2:
             intro_rect.x = 290
             text_coord += 40
         k += 1
