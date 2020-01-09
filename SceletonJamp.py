@@ -13,8 +13,8 @@ platform_sprites = pygame.sprite.Group()
 mario_sprite = pygame.sprite.Group()
 
 cameray = 1
-score = 0
-score_text = '0'
+score = 1
+score_text = '1'
 font = pygame.font.Font(None, 36)
 
 FPS = 25
@@ -90,17 +90,16 @@ class Mario(pygame.sprite.Sprite):
         screen.blit(string_rendered, intro_rect)
 
 class Platform(pygame.sprite.Sprite):
-    platforms_image = [load_image('platform1.png'), load_image('platform2.png'), load_image('platform3.png')]
+    platforms_image = [load_image('platform1.png'), load_image('platform2.png')]
 
     def __init__(self, x=-80, y=-18):
         global score_text
         super().__init__(all_sprites, platform_sprites)
-        if int(score_text) > 100:
-            platform_image = Platform.platforms_image[2]
-        elif int(score_text) > 40:
-            platform_image = random.choice(Platform.platforms_image)
-        else:
-            platform_image = random.choice(Platform.platforms_image[0:1])
+        if int(score_text) % 50 == 0:
+            Platform.platforms_image.append(load_image('platform3.png'))
+        if int(score_text) > 400:
+            Platform.platforms_image = [load_image('platform3.png')]
+        platform_image = random.choice(Platform.platforms_image)
         self.image = platform_image
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
