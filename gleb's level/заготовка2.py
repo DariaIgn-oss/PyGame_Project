@@ -2,6 +2,8 @@ import pygame
 import sys
 import os
 import random
+from Objects import Obstacle, Obstacle_2, Enemy, Enemy_2, Border, Platform
+from settings import dct_variables
 
 pygame.init()
 
@@ -18,7 +20,7 @@ width_obstacle = 50
 width_obstacle_2 = 30
 height_obstacle_2 = 50
 height_obstacle = 40
-speed = 10
+speed = dct_variables['speed']
 score = 0
 speed_koef = 50
 distance_between_obstacles = 50
@@ -46,11 +48,11 @@ def terminate():
 
 
 
-class Border(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__(border_sprite)
-        self.image = pygame.Surface([0, 480])
-        self.rect = pygame.Rect(0, 490, 800, 100)
+# class Border(pygame.sprite.Sprite):
+#     def __init__(self):
+#         super().__init__(border_sprite)
+#         self.image = pygame.Surface([0, 480])
+#         self.rect = pygame.Rect(0, 490, 800, 100)
 
 
 class Player(pygame.sprite.Sprite):
@@ -81,89 +83,89 @@ class Player(pygame.sprite.Sprite):
         # if direction == 1:
         #     if pygame.sprite.spritecollideany(self, all_sprites):
         #         start_screen()
-
-
-class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        y = random.randint(250, 450)
-        super().__init__(all_sprites)
-        self.image = pygame.Surface((width_obstacle, height_obstacle))
-        pygame.draw.rect(self.image, pygame.Color('red'), [0, 0, width_obstacle_2, height_obstacle_2], 0)
-        self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
-        self.speed = speed
-
-    def update(self):
-        self.rect = self.rect.move(-self.speed, 0)
-        if self.rect.x < -width_obstacle:
-            self.remove(all_sprites)
-        self.speed = speed
-
-
-class Enemy(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__(enemy_sprite)
-        self.image = pygame.Surface((width_obstacle, height_obstacle))
-        pygame.draw.rect(self.image, pygame.Color('yellow'), [0, 0, 50, 50], 0)
-        self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
-        self.speed = speed
-
-    def update(self):
-        self.rect = self.rect.move(-self.speed, 0)
-        if self.rect.x < -width_obstacle:
-            self.remove(all_sprites)
-        self.speed = speed
-
-
-class Obstacle_2(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__(all_sprites)
-        self.image = pygame.Surface((width_obstacle, height_obstacle))
-        pygame.draw.rect(self.image, pygame.Color('red'), [0, 0, width_obstacle_2, height_obstacle_2], 0)
-        self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
-        self.speed = speed
-
-    def update(self):
-        global score
-        self.rect = self.rect.move(-self.speed, 0)
-        if self.rect.x < -width_obstacle:
-            self.remove(all_sprites)
-            score += 20
-        self.speed = speed
-
-
-class Enemy_2(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__(all_sprites)
-        self.image = pygame.Surface((width_obstacle, height_obstacle))
-        pygame.draw.rect(self.image, pygame.Color('blue'), [0, 0, 30, 30], 0)
-        self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
-        self.speed = speed
-
-    def update(self):
-        global score
-        self.rect = self.rect.move(-self.speed, 0)
-        if self.rect.x < -width_obstacle:
-            self.remove(all_sprites)
-            score += 50
-        self.speed = speed
-
-
-
-class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__(all_sprites)
-        self.image = pygame.Surface((width_obstacle, height_obstacle))
-        pygame.draw.rect(self.image, pygame.Color('white'), [0, 0, width_obstacle, height_obstacle], 0)
-        self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
-        self.speed = speed
-
-    def update(self):
-        global score
-        self.rect = self.rect.move(-self.speed, 0)
-        if self.rect.x < -width_obstacle:
-            self.remove(all_sprites)
-            score += 10
-        self.speed = speed
+#
+#
+# class Platform(pygame.sprite.Sprite):
+#     def __init__(self, x, y):
+#         y = random.randint(250, 450)
+#         super().__init__(all_sprites)
+#         self.image = pygame.Surface((width_obstacle, height_obstacle))
+#         pygame.draw.rect(self.image, pygame.Color('red'), [0, 0, width_obstacle_2, height_obstacle_2], 0)
+#         self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
+#         self.speed = speed
+#
+#     def update(self):
+#         self.rect = self.rect.move(-self.speed, 0)
+#         if self.rect.x < -width_obstacle:
+#             self.remove(all_sprites)
+#         self.speed = speed
+#
+#
+# class Enemy(pygame.sprite.Sprite):
+#     def __init__(self, x, y):
+#         super().__init__(enemy_sprite)
+#         self.image = pygame.Surface((width_obstacle, height_obstacle))
+#         pygame.draw.rect(self.image, pygame.Color('yellow'), [0, 0, 50, 50], 0)
+#         self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
+#         self.speed = speed
+#
+#     def update(self):
+#         self.rect = self.rect.move(-self.speed, 0)
+#         if self.rect.x < -width_obstacle:
+#             self.remove(all_sprites)
+#         self.speed = speed
+#
+#
+# class Obstacle_2(pygame.sprite.Sprite):
+#     def __init__(self, x, y):
+#         super().__init__(all_sprites)
+#         self.image = pygame.Surface((width_obstacle, height_obstacle))
+#         pygame.draw.rect(self.image, pygame.Color('red'), [0, 0, width_obstacle_2, height_obstacle_2], 0)
+#         self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
+#         self.speed = speed
+#
+#     def update(self):
+#         global score
+#         self.rect = self.rect.move(-self.speed, 0)
+#         if self.rect.x < -width_obstacle:
+#             self.remove(all_sprites)
+#             score += 20
+#         self.speed = speed
+#
+#
+# class Enemy_2(pygame.sprite.Sprite):
+#     def __init__(self, x, y):
+#         super().__init__(all_sprites)
+#         self.image = pygame.Surface((width_obstacle, height_obstacle))
+#         pygame.draw.rect(self.image, pygame.Color('blue'), [0, 0, 30, 30], 0)
+#         self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
+#         self.speed = speed
+#
+#     def update(self):
+#         global score
+#         self.rect = self.rect.move(-self.speed, 0)
+#         if self.rect.x < -width_obstacle:
+#             self.remove(all_sprites)
+#             score += 50
+#         self.speed = speed
+#
+#
+#
+# class Obstacle(pygame.sprite.Sprite):
+#     def __init__(self, x, y):
+#         super().__init__(all_sprites)
+#         self.image = pygame.Surface((width_obstacle, height_obstacle))
+#         pygame.draw.rect(self.image, pygame.Color('white'), [0, 0, width_obstacle, height_obstacle], 0)
+#         self.rect = pygame.Rect(x, y, width_obstacle, height_obstacle)
+#         self.speed = speed
+#
+#     def update(self):
+#         global score
+#         self.rect = self.rect.move(-self.speed, 0)
+#         if self.rect.x < -width_obstacle:
+#             self.remove(all_sprites)
+#             score += 10
+#         self.speed = speed
 
 
 running = True
@@ -232,7 +234,7 @@ def level():
             multiple_speed = True
         if progress % 50 == 0 and count_obstacles_onlevel < 8:
             count_obstacles_onlevel += 1
-
+        dct_variables['speed'] = speed
 
 
         font = pygame.font.Font(None, 30)
