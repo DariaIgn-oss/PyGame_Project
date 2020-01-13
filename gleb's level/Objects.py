@@ -44,28 +44,28 @@ class ObstacleMain(pygame.sprite.Sprite):
 
 class Platform(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image('data/Obstacles/1.png'), 8, 2)
+        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 8, 2)
         y = random.randint(250, 450)
 
 
 class Enemy(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(enemy_sprite, width_obstacle, height_obstacle, x, y), load_image('data/Obstacles/1.png'), 8, 2
+        super().__init__(enemy_sprite, width_obstacle, height_obstacle, x, y), load_image(r'Obstacles\1.png'), 8, 2
 
 
 class Obstacle_2(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image('data/Obstacles/1.png'), 8, 2)
+        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 8, 2)
 
 
 class Enemy_2(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image('data/Obstacles/1.png'), 8, 2)
+        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 8, 2)
 
 
 class Obstacle(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image('data/Obstacles/1.png'), 8, 2)
+        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 1, 1)
 
 
 class Border(pygame.sprite.Sprite):

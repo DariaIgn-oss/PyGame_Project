@@ -3,7 +3,9 @@ import sys
 import os
 import random
 from Objects import Obstacle, Obstacle_2, Enemy, Enemy_2, Border, Platform
-from SettingsGame import dct_variables, all_sprites, enemy_sprite, border_sprite, player_sprite
+from SettingsGame import dct_variables, all_sprites, enemy_sprite, border_sprite, player_sprite, player_image
+from Player import Player
+
 
 pygame.init()
 
@@ -52,34 +54,34 @@ def terminate():
 #         self.rect = pygame.Rect(0, 490, 800, 100)
 
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
-        super().__init__(player_sprite)
-        self.image = player_image
-        self.rect = self.image.get_rect()
-        self.rect.x = pos_x
-        self.rect.y = pos_y
-        self.speed = 2
-        self.jump = False
-
-    def update(self, direction):
-        if self.jump:
-            if self.speed >= 0:
-                self.rect.y -= (self.speed ** 3)
-                if self.rect.y < 0:
-                    self.rect.y = 15  # высота марио
-            else:
-                self.rect.y += (self.speed ** 2)
-            self.speed -= 1
-        if self.rect.y > 460:
-            self.rect.y = 460
-            self.jump = False
-        if pygame.sprite.spritecollideany(self, border_sprite):
-            self.jump = False
-
-        # if direction == 1:
-        #     if pygame.sprite.spritecollideany(self, all_sprites):
-        #         start_screen()
+# class Player(pygame.sprite.Sprite):
+#     def __init__(self, pos_x, pos_y):
+#         super().__init__(player_sprite)
+#         self.image = player_image
+#         self.rect = self.image.get_rect()
+#         self.rect.x = pos_x
+#         self.rect.y = pos_y
+#         self.speed = 2
+#         self.jump = False
+#
+#     def update(self, direction):
+#         if self.jump:
+#             if self.speed >= 0:
+#                 self.rect.y -= (self.speed ** 3)
+#                 if self.rect.y < 0:
+#                     self.rect.y = 15  # высота марио
+#             else:
+#                 self.rect.y += (self.speed ** 2)
+#             self.speed -= 1
+#         if self.rect.y > 460:
+#             self.rect.y = 460
+#             self.jump = False
+#         if pygame.sprite.spritecollideany(self, border_sprite):
+#             self.jump = False
+#
+#         # if direction == 1:
+#         #     if pygame.sprite.spritecollideany(self, all_sprites):
+#         #         start_screen()
 #
 #
 # class Platform(pygame.sprite.Sprite):
@@ -258,7 +260,7 @@ def background_scroll(x1, x2, speed=5):
     return x1, x2
 
 
-# player_image = load_image('mario.png')
+# player_image = load_image("mario.png")
 background = load_image('postapocalypse1.png')
 
 background_size = background.get_size()
@@ -301,7 +303,7 @@ def start_screen():
 player_x = 50
 player_y = 440
 Border()
-# player = Player(player_x, player_y)
+player = Player(player_x, player_y, load_image(r"Hero\skeletonBase.png"), 10, 5)  # magic numbers, must fix
 koef = 15
 
 start_screen()
