@@ -3,7 +3,7 @@ import sys
 import os
 import random
 from Objects import Obstacle, Obstacle_2, Enemy, Enemy_2, Border, Platform
-from settings import dct_variables, all_sprites, enemy_sprite, border_sprite, player_sprite
+from SettingsGame import dct_variables, all_sprites, enemy_sprite, border_sprite, player_sprite
 
 pygame.init()
 
@@ -28,6 +28,7 @@ progress = 0
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
+    print(fullname)
     image = pygame.image.load(fullname)
     if colorkey is not None:
         if colorkey == -1:
@@ -257,8 +258,7 @@ def background_scroll(x1, x2, speed=5):
     return x1, x2
 
 
-
-player_image = load_image('mario.png')
+# player_image = load_image('mario.png')
 background = load_image('postapocalypse1.png')
 
 background_size = background.get_size()
@@ -301,7 +301,7 @@ def start_screen():
 player_x = 50
 player_y = 440
 Border()
-player = Player(player_x, player_y)
+# player = Player(player_x, player_y)
 koef = 15
 
 start_screen()
