@@ -10,15 +10,18 @@ screen = pygame.display.set_mode(size)
 all_sprites = pygame.sprite.Group()
 platforms = []
 platform_sprites = pygame.sprite.Group()
-mario_sprite = pygame.sprite.Group()
+sceleton_sprite = pygame.sprite.Group()
+mist_sprite = pygame.sprite.Group()
+enemy_sprites = pygame.sprite.Group()
 
-cameray = 1
+cameray = 0
 score = 1
 score_text = '1'
 font = pygame.font.Font(None, 36)
 
 FPS = 25
 clock = pygame.time.Clock()
+
 
 def terminate():
     pygame.quit()
@@ -37,12 +40,22 @@ def load_image(name, colorkey=None):
     return image
 
 
+def start_generate_Platform():
+    global HEIGHT, platforms
+    on = HEIGHT
+    while on > -100:
+        x_coord = random.randint(0, 720)
+        platforms.append([x_coord, on])
+        Platform(x_coord, on)
+        on -= 20
+
+
 class Mario(pygame.sprite.Sprite):
     skeleton_image = load_image('skeleton.png')
     skeleton_jump = [load_image('skeleton1.png'), load_image('skeleton2.png'), load_image('skeleton3.png')]
 
     def __init__(self, x, y):
-        super().__init__(mario_sprite)
+        super().__init__(sceleton_sprite)
         self.image = Mario.skeleton_image
         self.rect = self.image.get_rect()
         self.rect = pygame.Rect(x, y, 8, 46)
@@ -63,7 +76,7 @@ class Mario(pygame.sprite.Sprite):
                 self.isJump = False
                 self.jump_count = 13
                 self.image = Mario.skeleton_jump[2]
-                score -= 3
+                score -= 5
         else:
             score -= 1
 
@@ -78,7 +91,7 @@ class Mario(pygame.sprite.Sprite):
             if 0 < x < WIDTH - 24:
                 self.rect.x = x
 
-        if self.rect.y >= HEIGHT:
+        if self.rect.y + 25 >= HEIGHT:
             terminate()
 
         if int(score_text) < score:
@@ -89,15 +102,15 @@ class Mario(pygame.sprite.Sprite):
         intro_rect.x, intro_rect.y = 0, 0
         screen.blit(string_rendered, intro_rect)
 
+
 class Platform(pygame.sprite.Sprite):
-    platforms_image = [load_image('platform1.png'), load_image('platform2.png')]
+    platforms_image = [load_image('platform1.png', (255, 255, 255)), load_image('platform2.png')]
 
     def __init__(self, x=-80, y=-18):
-        global score_text
         super().__init__(all_sprites, platform_sprites)
-        if int(score_text) % 50 == 0:
+        if int(score_text) % 10 == 0:
             Platform.platforms_image.append(load_image('platform3.png'))
-        if int(score_text) > 400:
+        if int(score_text) > 300:
             Platform.platforms_image = [load_image('platform3.png')]
         platform_image = random.choice(Platform.platforms_image)
         self.image = platform_image
@@ -116,31 +129,63 @@ class Platform(pygame.sprite.Sprite):
             platforms.pop(0)
 
 
-def start_generate_Platform():
-    global HEIGHT, platforms
-    on = HEIGHT
-    while on > -100:
-        x_coord = random.randint(0, 720)
-        platforms.append([x_coord, on])
-        Platform(x_coord, on)
-        on -= 20
+class Mist(pygame.sprite.Sprite):
+    mist_image = [load_image(f'mist{i}.png') for i in range(1, 9)]
+    index = 0
+
+    def __init__(self):
+        super().__init__(mist_sprite)
+        self.image = Mist.mist_image[Mist.index]
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = 0, 0
+
+    def update(self):
+        Mist.index += 1
+        if Mist.index == 63:
+            Mist.index = 0
+        else:
+            self.image = Mist.mist_image[Mist.index // 8]
+
+
+class Enemy(pygame.sprite.Sprite):
+    enemy_image = load_image('gargoyle.png')
+    shift = 1
+
+    def __init__(self, x, y):
+        super().__init__(enemy_sprites)
+        self.image = Enemy.enemy_image
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+
+    def update(self):
+        global WIDTH, cameray
+        self.rect = self.rect.move(Enemy.shift, cameray)
+        if self.rect.x < 0:
+            self.image = pygame.transform.flip(self.image, True, False)
+            Enemy.shift *= -1
 
 
 def engine():
-    global FPS, clock, score_text
+    global FPS, clock
     start_generate_Platform()
     Mario(platforms[1][0], platforms[1][-1] - 45)
+    Mist()
+    Enemy(30, 300)
     activity = False
     pause = False
     image_fon = load_image('fon1.png')
     image_pause = load_image('pause.png')
+    arrow_image = load_image('bone1.png')
+    pos = 0, 0
     while True:
         for event in pygame.event.get():
             pygame.mouse.set_visible(False)
             if event.type == pygame.QUIT:
                 terminate()
-            if event.type == pygame.MOUSEMOTION and activity:
-                mario_sprite.update(event.pos[0])
+            if event.type == pygame.MOUSEMOTION:
+                pos = event.pos
+                if activity:
+                    sceleton_sprite.update(pos[0])
             if not activity and event.type == pygame.MOUSEBUTTONDOWN:
                 activity = True
                 pause = False
@@ -149,11 +194,16 @@ def engine():
         screen.fill((0, 0, 0))
         screen.blit(image_fon, (0, 0))
         all_sprites.draw(screen)
-        mario_sprite.draw(screen)
+        sceleton_sprite.draw(screen)
+        enemy_sprites.draw(screen)
+        mist_sprite.draw(screen)
+        screen.blit(arrow_image, (pos))
         if activity:
-            mario_sprite.update()
+            sceleton_sprite.update()
             all_sprites.update()
-            platform_sprites.update()
+            # platform_sprites.update()
+            mist_sprite.update()
+            enemy_sprites.update()
             clock.tick(FPS)
         if pause:
             activity = False
@@ -162,7 +212,7 @@ def engine():
 
 
 def start():
-    global FPS, clock, score
+    global FPS, clock
     fon = load_image('headpiece.png')
     screen.blit(fon, (0, 0))
     while True:
