@@ -1,24 +1,28 @@
 import pygame
 import random
 from constants import speed, width_obstacle, height_obstacle, width_obstacle_2, height_obstacle_2
-from SettingsGame import all_sprites, border_sprite, enemy_sprite, player_sprite, dct_variables
+from SettingsGame import all_sprites, border_sprite, player_sprite, speed_score
 from OddFunctions import load_image
-score = dct_variables['score']
+clock = pygame.time.Clock()
 
 
 class ObstacleMain(pygame.sprite.Sprite):
     def __init__(self, group, width, height, x, y, sheet, columns, rows):
-        super().__init__(group)
         # self.image = pygame.Surface([width, height])
         # pygame.draw.rect(self.image, color, [0, 0, width_obstacle_2, height_obstacle_2])
         # self.rect = pygame.Rect(x, y, width, height)
         self.speed = speed
-
+        self.count_time = 0
         self.frames = []
         self.cut_sheet(sheet, columns, rows)
         self.cur_frame = 0
         self.image = self.frames[self.cur_frame]
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.rect.move(x, y)
+        # while pygame.sprite.spritecollideany(self, all_sprites):
+        #     print(all_sprites)
+        #     self.rect.move(10, y)
+        super().__init__(group)
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
@@ -30,42 +34,53 @@ class ObstacleMain(pygame.sprite.Sprite):
                     frame_location, self.rect.size)))
 
     def update(self):
-        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
-        self.image = self.frames[self.cur_frame]
-
-        global score
+        if self.count_time % 5 == 0:
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = self.frames[self.cur_frame]
+        self.count_time += 1
+        global speed_score
         self.rect = self.rect.move(-self.speed, 0)
         if self.rect.x < -width_obstacle:
             self.remove(all_sprites)
-            score += 10
-        self.speed = speed
-        dct_variables['score'] = score
+            speed_score.score += 10
+        self.speed = speed_score.speed
+        self.property()
+
+    # def property(self):
+    #     pass
 
 
-class Platform(ObstacleMain):
+class Obstacle_4(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 8, 2)
-        y = random.randint(250, 450)
+        y = 440
+        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\4.png'), 1, 1)
 
-
-class Enemy(ObstacleMain):
-    def __init__(self, x, y):
-        super().__init__(enemy_sprite, width_obstacle, height_obstacle, x, y), load_image(r'Obstacles\1.png'), 8, 2
+    def property(self):
+        pass
 
 
 class Obstacle_2(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 8, 2)
+        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\2.png'), 5, 1)
+
+    def property(self):
+        pass
 
 
-class Enemy_2(ObstacleMain):
+class Obstacle_3(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 8, 2)
+        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\3.png'), 5, 1)
+
+    def property(self):
+        self.rect = self.rect.move(-10, 0)
 
 
 class Obstacle(ObstacleMain):
     def __init__(self, x, y):
-        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 1, 1)
+        super().__init__(all_sprites, width_obstacle, height_obstacle, x, y, load_image(r'Obstacles\1.png'), 5, 1)
+
+    def property(self):
+        pass
 
 
 class Border(pygame.sprite.Sprite):
