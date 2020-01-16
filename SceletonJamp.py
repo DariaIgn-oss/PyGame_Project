@@ -13,8 +13,9 @@ platform_sprites = pygame.sprite.Group()
 sceleton_sprite = pygame.sprite.Group()
 mist_sprite = pygame.sprite.Group()
 enemy_sprites = pygame.sprite.Group()
+shell_sprites = pygame.sprite.Group()
 
-cameray = 0
+cameray = 1
 score = 1
 score_text = '1'
 font = pygame.font.Font(None, 36)
@@ -43,11 +44,11 @@ def load_image(name, colorkey=None):
 def start_generate_Platform():
     global HEIGHT, platforms
     on = HEIGHT
-    while on > -100:
+    while on > -200:
         x_coord = random.randint(0, 720)
         platforms.append([x_coord, on])
         Platform(x_coord, on)
-        on -= 20
+        on -= 40
 
 
 class Mario(pygame.sprite.Sprite):
@@ -64,7 +65,7 @@ class Mario(pygame.sprite.Sprite):
         # global mario_coord
         # mario_coord.append(x, y)
 
-    def update(self, x=0):
+    def update(self, x=0, shot=False):
         global WIDTH, HEIGHT, cameray, score, score_text, font
 
         if self.isJump:
@@ -91,6 +92,9 @@ class Mario(pygame.sprite.Sprite):
             if 0 < x < WIDTH - 24:
                 self.rect.x = x
 
+        if shot:
+            Shell(self.rect.x, self.rect.y)
+
         if self.rect.y + 25 >= HEIGHT:
             terminate()
 
@@ -103,13 +107,34 @@ class Mario(pygame.sprite.Sprite):
         screen.blit(string_rendered, intro_rect)
 
 
+class Shell(pygame.sprite.Sprite):
+    shell_image = load_image('bone3.png')
+
+    def __init__(self, x, y):
+        super().__init__(shell_sprites)
+        self.image_orig = Shell.shell_image
+        self.image = self.image_orig.copy()
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+        self.rot = 0
+        self.rot_speed = random.randrange(-8, 8)
+
+    def update(self):
+        self.rect = self.rect.move(0, -7)
+        self.rot = (self.rot + self.rot_speed) % 360
+        self.image = pygame.transform.rotate(self.image_orig, self.rot)
+
+
 class Platform(pygame.sprite.Sprite):
     platforms_image = [load_image('platform1.png', (255, 255, 255)), load_image('platform2.png')]
 
     def __init__(self, x=-80, y=-18):
+        global platforms
         super().__init__(all_sprites, platform_sprites)
-        if int(score_text) % 10 == 0:
+        if int(score_text) % 20 == 0:
             Platform.platforms_image.append(load_image('platform3.png'))
+        if int(score_text) > 20 and int(score_text) % 1 == 0:
+            Enemy(platforms[-1][0] + 5, platforms[-1][1] - 35)
         if int(score_text) > 300:
             Platform.platforms_image = [load_image('platform3.png')]
         platform_image = random.choice(Platform.platforms_image)
@@ -124,7 +149,7 @@ class Platform(pygame.sprite.Sprite):
         platforms[1][1] += cameray
         global HEIGHT
         if check > HEIGHT:
-            platforms.append([random.randint(0, 720), platforms[-1][1] - 20])
+            platforms.append([random.randint(0, 720), platforms[-1][1] - 40])
             Platform(platforms[-1][0], platforms[-1][1])
             platforms.pop(0)
 
@@ -148,21 +173,31 @@ class Mist(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    enemy_image = load_image('gargoyle.png')
-    shift = 1
+    enemy_image = [load_image('gargoyle.png')]
 
     def __init__(self, x, y):
+        global WIDTH
         super().__init__(enemy_sprites)
-        self.image = Enemy.enemy_image
+        self.image = Enemy.enemy_image[0]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
+        self.jump_count = 5
+        self.is_Jump = False
 
     def update(self):
         global WIDTH, cameray
-        self.rect = self.rect.move(Enemy.shift, cameray)
-        if self.rect.x < 0:
-            self.image = pygame.transform.flip(self.image, True, False)
-            Enemy.shift *= -1
+        if pygame.sprite.spritecollideany(self, platform_sprites):
+            self.is_Jump = True
+        else:
+            self.rect = self.rect.move(0, self.jump_count)
+
+        if self.is_Jump:
+            if self.jump_count >= 0:
+                self.rect = self.rect.move(0, -self.jump_count)
+                self.jump_count -= 1
+            else:
+                self.is_Jump = False
+                self.jump_count = 5
 
 
 def engine():
@@ -170,7 +205,6 @@ def engine():
     start_generate_Platform()
     Mario(platforms[1][0], platforms[1][-1] - 45)
     Mist()
-    Enemy(30, 300)
     activity = False
     pause = False
     image_fon = load_image('fon1.png')
@@ -186,6 +220,8 @@ def engine():
                 pos = event.pos
                 if activity:
                     sceleton_sprite.update(pos[0])
+            if activity and event.type == pygame.MOUSEBUTTONDOWN:
+                sceleton_sprite.update(0, True)
             if not activity and event.type == pygame.MOUSEBUTTONDOWN:
                 activity = True
                 pause = False
@@ -196,14 +232,16 @@ def engine():
         all_sprites.draw(screen)
         sceleton_sprite.draw(screen)
         enemy_sprites.draw(screen)
+        shell_sprites.draw(screen)
         mist_sprite.draw(screen)
         screen.blit(arrow_image, (pos))
         if activity:
             sceleton_sprite.update()
             all_sprites.update()
             # platform_sprites.update()
-            mist_sprite.update()
             enemy_sprites.update()
+            shell_sprites.update()
+            mist_sprite.update()
             clock.tick(FPS)
         if pause:
             activity = False
