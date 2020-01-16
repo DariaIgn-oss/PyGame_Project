@@ -8,9 +8,6 @@ clock = pygame.time.Clock()
 
 class ObstacleMain(pygame.sprite.Sprite):
     def __init__(self, group, width, height, x, y, sheet, columns, rows):
-        # self.image = pygame.Surface([width, height])
-        # pygame.draw.rect(self.image, color, [0, 0, width_obstacle_2, height_obstacle_2])
-        # self.rect = pygame.Rect(x, y, width, height)
         self.speed = speed
         self.count_time = 0
         self.frames = []
@@ -19,9 +16,6 @@ class ObstacleMain(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.rect.move(x, y)
-        # while pygame.sprite.spritecollideany(self, all_sprites):
-        #     print(all_sprites)
-        #     self.rect.move(10, y)
         super().__init__(group)
 
     def cut_sheet(self, sheet, columns, rows):
@@ -37,6 +31,7 @@ class ObstacleMain(pygame.sprite.Sprite):
         if self.count_time % 5 == 0:
             self.cur_frame = (self.cur_frame + 1) % len(self.frames)
             self.image = self.frames[self.cur_frame]
+            self.mask = pygame.mask.from_surface(self.image)
         self.count_time += 1
         global speed_score
         self.rect = self.rect.move(-self.speed, 0)
@@ -46,8 +41,8 @@ class ObstacleMain(pygame.sprite.Sprite):
         self.speed = speed_score.speed
         self.property()
 
-    # def property(self):
-    #     pass
+    def property(self):
+        pass
 
 
 class Obstacle_4(ObstacleMain):

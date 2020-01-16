@@ -1,16 +1,11 @@
 import pygame
-from SettingsGame import player_sprite, border_sprite, player_image, all_sprites
+from SettingsGame import player_sprite, border_sprite, all_sprites, screen
 from OddFunctions import terminate
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, sheet, columns, rows):
         super().__init__(player_sprite)
-        self.image = player_image
-        self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect()
-        self.rect.x = pos_x
-        self.rect.y = pos_y
         self.speed = 2
         self.jump = False
         self.walk = []
@@ -19,6 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.cur_frame = 0
         self.image = self.walk[self.cur_frame]
         self.rect = self.rect.move(pos_x, pos_y)
+        self.mask = pygame.mask.from_surface(self.image)
 
     def cut_sheet(self, sheet, columns, rows):
         self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
@@ -34,6 +30,14 @@ class Player(pygame.sprite.Sprite):
                         frame_location, self.rect.size)))
 
     def update(self):
+        for i in all_sprites:
+            if pygame.sprite.collide_mask(self, i):
+                all_sprites.update()
+                player_sprite.draw(screen)
+                all_sprites.draw(screen)
+                pygame.display.flip()
+                terminate()
+
         if not self.jump:
             self.cur_frame = (self.cur_frame + 1) % len(self.walk)
             self.image = self.walk[self.cur_frame]
@@ -52,6 +56,5 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, border_sprite):
             self.last_frame_fall = False
             self.jump = False
-        for i in all_sprites:
-            if pygame.sprite.collide_mask(self, i):
-                terminate()
+        self.mask = pygame.mask.from_surface(self.image, 300)
+
