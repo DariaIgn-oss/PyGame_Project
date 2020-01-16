@@ -113,9 +113,9 @@ h_of_monster = 252
 FPS = 50
 boiler_count = h + 10
 count_of_hearts = 3
-z = 0
-p = 0
-n = 0
+coef_heart = 0
+pause_count = 0
+coef_monster_apdate = 0
 pause = False
 rects = []
 
@@ -159,7 +159,7 @@ def pushing():
 
 
 def first_level():
-    global count, FPS, x_pos, y_pos, boiler_count, z, pause, p, n
+    global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_monster_apdate
     flag = True
     # pygame.mouse.set_visible(False)
     heartimg = pygame.transform.scale(load_image('heart.png'), (55, 55))
@@ -172,7 +172,7 @@ def first_level():
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 terminate()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and p % 2 == 0:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and pause_count % 2 == 0:
                 pause = True
                 for line in intro_text:
                     string_rendered = font.render(line, 1, pygame.Color(255, 255, 255))
@@ -181,17 +181,17 @@ def first_level():
                     intro_rect.top = text_coord
                     screen.blit(string_rendered, intro_rect)
                 screen.blit(fon, (0, 0))
-                p += 1
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and p % 2 != 0:
+                pause_count += 1
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and pause_count % 2 != 0:
                 pause = False
-                p += 1
+                pause_count += 1
 
         if not pause:
             if count % 1000 == 0 and FPS < 110:
                 FPS += 3
             count += 8
-            n += 1
-            if n % 10 == 0:
+            coef_monster_apdate += 1
+            if coef_monster_apdate % 10 == 0:
                 monster_sprites.update()
 
             if pygame.key.get_pressed()[275]:
@@ -218,8 +218,8 @@ def first_level():
             mario_sprite.update(1)
             all_sprites.draw(screen)
             monster_sprites.draw(screen)
-            z += 1
-            if z % 5 == 0:
+            coef_heart += 1
+            if coef_heart % 5 == 0:
                 indent_from_right = 55
                 shaking = 1
             else:
