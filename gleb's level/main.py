@@ -7,11 +7,13 @@ from OddFunctions import terminate, load_image
 
 
 pygame.init()
+pygame.mixer.init()
 
 fps = 20
 clock = pygame.time.Clock()
 speed_koef = 50
 count_obstacles_onlevel = 3
+# jump = pygame.mixer.music.load('data/level_audio.wav')
 multiple_speed = True
 progress = 0
 
@@ -46,6 +48,9 @@ def level():
                 terminate()
 
         if pygame.key.get_pressed()[273]:
+            # pygame.mixer.music.load('data/jump.wav')
+            # pygame.mixer.music.play()
+            # pygame.mixer.Sound('data/jump.wav').play()
             player.jump = True
             player.speed = 3
 
@@ -134,7 +139,6 @@ def start_screen():
             if event.type == pygame.QUIT:
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                pygame.mixer.init()
                 pygame.mixer.Sound('data/level_audio.wav').play()
                 level()  # начинаем игру
         pygame.display.flip()

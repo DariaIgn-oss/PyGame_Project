@@ -41,6 +41,7 @@ class Player(pygame.sprite.Sprite):
         if not self.jump:
             self.cur_frame = (self.cur_frame + 1) % len(self.walk)
             self.image = self.walk[self.cur_frame]
+            pygame.mixer.Sound('data/step.wav').play()
         if self.jump:
             if self.speed >= 0:
                 self.rect.y -= (self.speed ** 3)
