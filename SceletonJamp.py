@@ -7,7 +7,6 @@ pygame.init()
 size = WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode(size)
 
-all_sprites = pygame.sprite.Group()
 platforms = []
 platform_sprites = pygame.sprite.Group()
 sceleton_sprite = pygame.sprite.Group()
@@ -51,19 +50,24 @@ def start_generate_Platform():
         on -= 40
 
 
-class Sceleton(pygame.sprite.Sprite):
+class Object(pygame.sprite.Sprite):
+    def __init__(self, x, y, image, sprite_group, widht=0, height=0):
+        super().__init__(sprite_group)
+        self.image = image
+        self.rect = self.image.get_rect()
+        if widht != 0 or height != 0:
+            self.rect = pygame.Rect(x, y, 8, 46)
+        self.rect.x, self.rect.y = x, y
+
+
+class Sceleton(Object):
     skeleton_image = load_image('skeleton.png')
     skeleton_jump = [load_image('skeleton1.png'), load_image('skeleton2.png'), load_image('skeleton3.png')]
 
     def __init__(self, x, y):
-        super().__init__(sceleton_sprite)
-        self.image = Sceleton.skeleton_image
-        self.rect = self.image.get_rect()
-        self.rect = pygame.Rect(x, y, 8, 46)
+        super().__init__(x, y, Sceleton.skeleton_image, sceleton_sprite, 8, 46)
         self.isJump = False
         self.jump_count = 13
-        # global mario_coord
-        # mario_coord.append(x, y)
 
     def update(self, x=0, shot=False):
         global WIDTH, HEIGHT, cameray, score, score_text, font
@@ -107,15 +111,12 @@ class Sceleton(pygame.sprite.Sprite):
         screen.blit(string_rendered, intro_rect)
 
 
-class Shell(pygame.sprite.Sprite):
+class Shell(Object):
     shell_image = load_image('bone3.png')
 
     def __init__(self, x, y):
-        super().__init__(shell_sprites)
         self.image_orig = Shell.shell_image
-        self.image = self.image_orig.copy()
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = x, y
+        super().__init__(x, y, Shell.shell_image, shell_sprites)
         self.rot = 0
         self.rot_speed = random.randrange(-8, 8)
 
@@ -125,13 +126,12 @@ class Shell(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.image_orig, self.rot)
 
 
-class Platform(pygame.sprite.Sprite):
+class Platform(Object):
     platforms_image = [load_image('platform1.png', (255, 255, 255)), load_image('platform2.png')]
 
     def __init__(self, x=-80, y=-18):
         global platforms
         divider = random.randint(1, 11)
-        super().__init__(all_sprites, platform_sprites)
         if int(score_text) % 20 == 0:
             Platform.platforms_image.append(load_image('platform3.png'))
         if int(score_text) > 10 and int(score_text) % divider == 0:
@@ -139,9 +139,7 @@ class Platform(pygame.sprite.Sprite):
         if int(score_text) > 300:
             Platform.platforms_image = [load_image('platform3.png')]
         platform_image = random.choice(Platform.platforms_image)
-        self.image = platform_image
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = x, y
+        super().__init__(x, y, platform_image, platform_sprites)
 
     def update(self):
         global platforms, cameray
@@ -155,15 +153,12 @@ class Platform(pygame.sprite.Sprite):
             platforms.pop(0)
 
 
-class Mist(pygame.sprite.Sprite):
+class Mist(Object):
     mist_image = [load_image(f'mist{i}.png') for i in range(1, 9)]
     index = 0
 
     def __init__(self):
-        super().__init__(mist_sprite)
-        self.image = Mist.mist_image[Mist.index]
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = 0, 0
+        super().__init__(0, 0, Mist.mist_image[Mist.index], mist_sprite)
 
     def update(self):
         Mist.index += 1
@@ -173,15 +168,12 @@ class Mist(pygame.sprite.Sprite):
             self.image = Mist.mist_image[Mist.index // 8]
 
 
-class Enemy(pygame.sprite.Sprite):
-    enemy_image = [load_image('gargoyle.png'), load_image('boom.png')]
+class Enemy(Object):
+    enemy_image = load_image('gargoyle.png')
 
     def __init__(self, x, y):
         global WIDTH
-        super().__init__(enemy_sprites)
-        self.image = Enemy.enemy_image[0]
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = x, y
+        super().__init__(x, y, Enemy.enemy_image, enemy_sprites)
         self.jump_count = 5
         self.is_Jump = False
 
@@ -198,7 +190,7 @@ class Enemy(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, sceleton_sprite):
             terminate()
 
-        if self.is_Jump and self.image != Enemy.enemy_image[-1]:
+        if self.is_Jump:
             if self.jump_count >= 0:
                 self.rect = self.rect.move(0, -self.jump_count)
                 self.jump_count -= 1
@@ -236,7 +228,7 @@ def engine():
                 pause = True
         screen.fill((0, 0, 0))
         screen.blit(image_fon, (0, 0))
-        all_sprites.draw(screen)
+        platform_sprites.draw(screen)
         sceleton_sprite.draw(screen)
         enemy_sprites.draw(screen)
         shell_sprites.draw(screen)
@@ -244,7 +236,7 @@ def engine():
         screen.blit(arrow_image, (pos))
         if activity:
             sceleton_sprite.update()
-            all_sprites.update()
+            platform_sprites.update()
             # platform_sprites.update()
             enemy_sprites.update()
             shell_sprites.update()
