@@ -86,6 +86,7 @@ class Sceleton(Object):
             score -= 1
 
         if pygame.sprite.spritecollideany(self, platform_sprites) or self.isJump:
+
             self.isJump = True
             self.image = Sceleton.skeleton_jump[0]
         else:
