@@ -8,7 +8,7 @@ class Platform(pygame.sprite.Sprite):
     image = load_image('platform2.png')
 
     def __init__(self, xx, yy, ww, hh, vy):
-        super().__init__(all_sprites)
+        super().__init__(platfs_sprites)
         self.image = Platform.image
         pygame.draw.rect(self.image, pygame.Color('black'), [xx, yy, ww, hh], 0)
         self.rect = pygame.Rect(xx, yy, ww, hh)
@@ -102,12 +102,13 @@ def hearts():
 
 
 def pushing():
-    global all_sprites, rects, FPS, boiler_count, count
+    global all_sprites, rects, FPS, boiler_count, count, platfs_sprites, fon_count
     rects = []
     FPS = 60
     boiler_count = HEIGHT + 10
     count = 0
-    all_sprites = pygame.sprite.Group()
+    fon_count = 0
+    platfs_sprites = pygame.sprite.Group()
     # генерация платформ
     for i in range(250):
         x = random.randint(0, WIDTH - height_of_rect)
@@ -121,13 +122,13 @@ def pushing():
     for i in range(7):
         x = random.randint(0, WIDTH - w_of_monster)
         y = random.randint(-2000, -HEIGHT - 300)
-        AnimatedSprite(load_image("monsters.png"), 8, 1, x, y)
+        AnimatedSprite(load_image("monstersss.png"), 8, 1, x, y)
 
 
 def first_level():
     global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_monster_apdate, fon_count
     flag = True
-    heartimg = pygame.transform.scale(load_image('heart.png'), (55, 55))
+    heartimg = pygame.transform.scale(load_image('hearted.png'), (55, 55))
     forest = pygame.transform.scale(load_image('frame6.png'), (WIDTH + 350, HEIGHT + 550))
     intro_text = ['PAUSE']
     fon = pygame.transform.scale(load_image('grey_pause.png'), (WIDTH, HEIGHT))
@@ -155,18 +156,31 @@ def first_level():
             if count % 1000 == 0 and FPS < 110:
                 FPS += 3
             count += 8
-            coef_monster_apdate += 1
-            if coef_monster_apdate % 10 == 0:
+            is_move = False
+
+            coef_apdate += 1
+            if coef_apdate % 9 == 0:
                 monster_sprites.update()
 
             if pygame.key.get_pressed()[275]:
                 skel_sprite.update('left')
+                is_move = True
+                first_move = True
             elif pygame.key.get_pressed()[276]:
                 skel_sprite.update('right')
+                is_move = True
+                first_move = True
             elif pygame.key.get_pressed()[274]:
                 skel_sprite.update('up')
+                is_move = True
+                first_move = True
             elif pygame.key.get_pressed()[273]:
                 skel_sprite.update('down')
+                is_move = True
+                first_move = True
+
+            if not is_move and first_move and coef_apdate % 3 == 0:
+                skel_sprite.update('up')
 
             if boiler_count > 200 and flag:
                 boiler_count -= 7
@@ -180,11 +194,11 @@ def first_level():
             screen.blit(boiler, (0, boiler_count))
             if boiler_count > HEIGHT:
                 skel_sprite.draw(screen)
-            platfs_sprites.draw(screen)
+            all_sprites.draw(screen)
             monster_sprites.draw(screen)
+
             fon_count -= 3
-            coef_heart += 1
-            if coef_heart % 7 == 0:
+            if coef_apdate % 7 == 0:
                 indent_from_right = 55
                 shaking = 1
             else:
