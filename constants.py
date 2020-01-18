@@ -59,10 +59,9 @@ count_of_hearts = 3
 coef_heart = 0
 pause_count = 0
 coef_monster_apdate = 0
+fon_count = 0
 pause = False
 rects = []
-mario_sprite = pygame.sprite.Group()
-all_sprites = pygame.sprite.Group()
+skel_sprite = pygame.sprite.Group()
+platfs_sprites = pygame.sprite.Group()
 monster_sprites = pygame.sprite.Group()
-
-color = pygame.Color(255, 255, 100)

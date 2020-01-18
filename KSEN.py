@@ -7,25 +7,32 @@ from loading_image import load_image
 class Platform(pygame.sprite.Sprite):
     image = load_image('platform2.png')
 
-    def __init__(self, xx, yy, ww, hh, vy, colorr):
+    def __init__(self, xx, yy, ww, hh, vy):
         super().__init__(all_sprites)
         self.image = Platform.image
-        pygame.draw.rect(self.image, colorr, [xx, yy, ww, hh], 0)
+        pygame.draw.rect(self.image, pygame.Color('black'), [xx, yy, ww, hh], 0)
         self.rect = pygame.Rect(xx, yy, ww, hh)
+        self.mask = pygame.mask.from_surface(self.image)
         self.vy = vy
 
     def update(self):
+        global rects
         self.rect = self.rect.move(0, self.vy)
+        # for i in range(len(rects)):
+        #     rects[i][-1] += self.vy
+        for i in skel_sprite:
+            if pygame.sprite.collide_mask(self, i):
+                start_screen()
 
 
-class Mario(pygame.sprite.Sprite):
+class Skel(pygame.sprite.Sprite):
     image = load_image('skeleton.png')
 
     def __init__(self, ww, hh, wi_of_im, he_of_im):
-        super().__init__(mario_sprite)
+        super().__init__(skel_sprite)
         self.w = ww
         self.h = hh
-        self.image = Mario.image
+        self.image = Skel.image
         self.rect = self.image.get_rect()
         self.rect.y = hh - 100
         self.rect.x = ww // 2
@@ -54,10 +61,6 @@ class Mario(pygame.sprite.Sprite):
             else:
                 self.rect = self.rect.move(0, -8)
 
-        if direction == 1:
-            if pygame.sprite.spritecollideany(self, all_sprites):
-                start_screen()
-
 
 class AnimatedSprite(pygame.sprite.Sprite):
     def __init__(self, sheet, columns, rows, x, y):
@@ -66,6 +69,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.cut_sheet(sheet, columns, rows)
         self.cur_frame = 0
         self.image = self.frames[self.cur_frame]
+        self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.rect.move(x, y)
 
     def cut_sheet(self, sheet, columns, rows):
@@ -80,11 +84,15 @@ class AnimatedSprite(pygame.sprite.Sprite):
     def update(self):
         self.cur_frame = (self.cur_frame + 1) % len(self.frames)
         self.image = self.frames[self.cur_frame]
-        self.rect = self.rect.move(0, 5)
+        self.rect = self.rect.move(0, 17)
+        self.mask = pygame.mask.from_surface(self.image)
+        for i in skel_sprite:
+            if pygame.sprite.collide_mask(self, i):
+                start_screen()
 
 
 pygame.init()
-Mario(WIDTH, HEIGHT, width_of_image, height_of_image)
+Skel(WIDTH, HEIGHT, width_of_image, height_of_image)
 boiler = pygame.transform.scale(load_image('boiler111.png', -1), (WIDTH, HEIGHT))
 
 
@@ -108,7 +116,7 @@ def pushing():
         else:
             y = random.randint(-HEIGHT - range_between * i * 2, rects[i - 1][1] - range_between)
         rects.append([x, y])
-        Platform(x, y, height_of_rect, width_of_rect, 5, color)
+        Platform(x, y, height_of_rect, width_of_rect, 5)
     # генерация монстров
     for i in range(7):
         x = random.randint(0, WIDTH - w_of_monster)
@@ -119,9 +127,8 @@ def pushing():
 def first_level():
     global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_monster_apdate
     flag = True
-    # pygame.mouse.set_visible(False)
     heartimg = pygame.transform.scale(load_image('heart.png'), (55, 55))
-    forest = pygame.transform.scale(load_image('triredd.jpg'), (WIDTH + 350, HEIGHT + 550))
+    forest = pygame.transform.scale(load_image('frame6.png'), (WIDTH + 350, HEIGHT + 550))
     intro_text = ['PAUSE']
     fon = pygame.transform.scale(load_image('grey_pause.png'), (WIDTH, HEIGHT))
     font = pygame.font.Font(None, 80)
@@ -153,13 +160,13 @@ def first_level():
                 monster_sprites.update()
 
             if pygame.key.get_pressed()[275]:
-                mario_sprite.update('left')
+                skel_sprite.update('left')
             elif pygame.key.get_pressed()[276]:
-                mario_sprite.update('right')
+                skel_sprite.update('right')
             elif pygame.key.get_pressed()[274]:
-                mario_sprite.update('up')
+                skel_sprite.update('up')
             elif pygame.key.get_pressed()[273]:
-                mario_sprite.update('down')
+                skel_sprite.update('down')
 
             if boiler_count > 200 and flag:
                 boiler_count -= 7
@@ -168,21 +175,22 @@ def first_level():
             if boiler_count < 200:
                 flag = False
 
-            all_sprites.update()
-            screen.blit(forest, (-150, 0))
+            platfs_sprites.update()
+            screen.blit(forest, (0, fon_count))
             screen.blit(boiler, (0, boiler_count))
             if boiler_count > HEIGHT:
-                mario_sprite.draw(screen)
-            mario_sprite.update(1)
-            all_sprites.draw(screen)
+                skel_sprite.draw(screen)
+            skel_sprite.update(1)
+            platfs_sprites.draw(screen)
             monster_sprites.draw(screen)
+            fon_count -= 3
             coef_heart += 1
-            if coef_heart % 5 == 0:
+            if coef_heart % 7 == 0:
                 indent_from_right = 55
                 shaking = 1
             else:
                 indent_from_right = 53
-                shaking = 0
+                shaking = 2
             for i in range(count_of_hearts + 1):
                 screen.blit(heartimg, (WIDTH - indent_from_right, shaking))
                 indent_from_right += 60
