@@ -125,7 +125,7 @@ def pushing():
 
 
 def first_level():
-    global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_monster_apdate
+    global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_monster_apdate, fon_count
     flag = True
     heartimg = pygame.transform.scale(load_image('heart.png'), (55, 55))
     forest = pygame.transform.scale(load_image('frame6.png'), (WIDTH + 350, HEIGHT + 550))
@@ -180,7 +180,6 @@ def first_level():
             screen.blit(boiler, (0, boiler_count))
             if boiler_count > HEIGHT:
                 skel_sprite.draw(screen)
-            skel_sprite.update(1)
             platfs_sprites.draw(screen)
             monster_sprites.draw(screen)
             fon_count -= 3
