@@ -118,10 +118,10 @@ class Shell(Object):
         self.image_orig = Shell.shell_image
         super().__init__(x, y, Shell.shell_image, shell_sprites)
         self.rot = 0
-        self.rot_speed = random.randrange(-8, 8)
+        self.rot_speed = random.randrange(-16, 16)
 
     def update(self):
-        self.rect = self.rect.move(0, -7)
+        self.rect = self.rect.move(0, -10)
         self.rot = (self.rot + self.rot_speed) % 360
         self.image = pygame.transform.rotate(self.image_orig, self.rot)
 
@@ -132,7 +132,7 @@ class Platform(Object):
     def __init__(self, x=-80, y=-18):
         global platforms
         divider = random.randint(1, 11)
-        if int(score_text) % 20 == 0:
+        if int(score_text) % 10 == 0:
             Platform.platforms_image.append(load_image('platform3.png'))
         if int(score_text) > 10 and int(score_text) % divider == 0:
             Enemy(platforms[-1][0] + 5, platforms[-1][1] - 35)
@@ -237,7 +237,6 @@ def engine():
         if activity:
             sceleton_sprite.update()
             platform_sprites.update()
-            # platform_sprites.update()
             enemy_sprites.update()
             shell_sprites.update()
             mist_sprite.update()
