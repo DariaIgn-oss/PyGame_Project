@@ -102,13 +102,24 @@ def hearts():
 
 
 def pushing():
-    global all_sprites, rects, FPS, boiler_count, count, platfs_sprites, fon_count
+    global platfs_sprites, rects, FPS, boiler_count, count, fon_count, x_pos, y_pos, pause, is_move, \
+        skel_sprite, monster_sprites, pause_count, first_move, coef_apdate, coef_heart
     rects = []
-    FPS = 60
+    FPS = 80
     boiler_count = HEIGHT + 10
     count = 0
+    x_pos = WIDTH // 2
+    y_pos = HEIGHT - 60
+    pause = False
+    is_move = False
+    first_move = False
+    coef_heart = 0
+    pause_count = 0
+    coef_apdate = 0
     fon_count = 0
+    skel_sprite = pygame.sprite.Group()
     platfs_sprites = pygame.sprite.Group()
+    monster_sprites = pygame.sprite.Group()
     # генерация платформ
     for i in range(250):
         x = random.randint(0, WIDTH - height_of_rect)
@@ -117,20 +128,24 @@ def pushing():
         else:
             y = random.randint(-HEIGHT - range_between * i * 2, rects[i - 1][1] - range_between)
         rects.append([x, y])
+        # if i == 249:
+        #     print(rects[i][-1])
         Platform(x, y, height_of_rect, width_of_rect, 5)
     # генерация монстров
     for i in range(7):
         x = random.randint(0, WIDTH - w_of_monster)
-        y = random.randint(-2000, -HEIGHT - 300)
+        y = random.randint(-6000, -HEIGHT - 300)
         AnimatedSprite(load_image("monstersss.png"), 8, 1, x, y)
+    Skel(WIDTH, HEIGHT, width_of_image, height_of_image)
 
 
 def first_level():
-    global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_monster_apdate, fon_count
+    global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_apdate, fon_count, coef
     flag = True
     heartimg = pygame.transform.scale(load_image('hearted.png'), (55, 55))
-    forest = pygame.transform.scale(load_image('frame6.png'), (WIDTH + 350, HEIGHT + 550))
+    forest = load_image('frame6.png')
     intro_text = ['PAUSE']
+    first_move = False
     fon = pygame.transform.scale(load_image('grey_pause.png'), (WIDTH, HEIGHT))
     font = pygame.font.Font(None, 80)
     while running:
@@ -194,7 +209,7 @@ def first_level():
             screen.blit(boiler, (0, boiler_count))
             if boiler_count > HEIGHT:
                 skel_sprite.draw(screen)
-            all_sprites.draw(screen)
+            platfs_sprites.draw(screen)
             monster_sprites.draw(screen)
 
             fon_count -= 3
