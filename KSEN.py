@@ -1,19 +1,7 @@
-import pygame
 import random
-import os
 import sys
-
-
-def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
-    image = pygame.image.load(fullname)
-    if colorkey is not None:
-        if colorkey == -1:
-            colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey)
-    else:
-        image = image
-    return image
+from constants import *
+from loading_image import load_image
 
 
 class Platform(pygame.sprite.Sprite):
@@ -96,38 +84,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
 
 
 pygame.init()
-clock = pygame.time.Clock()
-
-w, h = 800, 600
-x_pos = w // 2
-y_pos = h - 60
-range_between = 40
-running = True
-count = 0
-width_of_rect = 15
-height_of_rect = 80
-width_of_image = 20
-height_of_image = 48
-w_of_monster = 126
-h_of_monster = 252
-FPS = 50
-boiler_count = h + 10
-count_of_hearts = 3
-coef_heart = 0
-pause_count = 0
-coef_monster_apdate = 0
-pause = False
-rects = []
-
-size = width, height = w, h
-screen = pygame.display.set_mode(size)
-mario_sprite = pygame.sprite.Group()
-all_sprites = pygame.sprite.Group()
-monster_sprites = pygame.sprite.Group()
-
-color = pygame.Color(255, 255, 100)
-boiler = pygame.transform.scale(load_image('boiler111.png', -1), (w, h))
-Mario(w, h, width_of_image, height_of_image)
+Mario(WIDTH, HEIGHT, width_of_image, height_of_image)
+boiler = pygame.transform.scale(load_image('boiler111.png', -1), (WIDTH, HEIGHT))
 
 
 def hearts():
@@ -139,22 +97,22 @@ def pushing():
     global all_sprites, rects, FPS, boiler_count, count
     rects = []
     FPS = 60
-    boiler_count = h + 10
+    boiler_count = HEIGHT + 10
     count = 0
     all_sprites = pygame.sprite.Group()
     # генерация платформ
     for i in range(250):
-        x = random.randint(0, w - height_of_rect)
+        x = random.randint(0, WIDTH - height_of_rect)
         if i == 0:
-            y = random.randint(-h - range_between * i, -1 * width_of_rect - 140)
+            y = random.randint(-HEIGHT - range_between * i, -1 * width_of_rect - 140)
         else:
-            y = random.randint(-h - range_between * i * 2, rects[i - 1][1] - range_between)
+            y = random.randint(-HEIGHT - range_between * i * 2, rects[i - 1][1] - range_between)
         rects.append([x, y])
         Platform(x, y, height_of_rect, width_of_rect, 5, color)
     # генерация монстров
     for i in range(7):
-        x = random.randint(0, w - w_of_monster)
-        y = random.randint(-2000, -h - 300)
+        x = random.randint(0, WIDTH - w_of_monster)
+        y = random.randint(-2000, -HEIGHT - 300)
         AnimatedSprite(load_image("monsters.png"), 8, 1, x, y)
 
 
@@ -163,12 +121,12 @@ def first_level():
     flag = True
     # pygame.mouse.set_visible(False)
     heartimg = pygame.transform.scale(load_image('heart.png'), (55, 55))
-    forest = pygame.transform.scale(load_image('triredd.jpg'), (w + 350, h + 550))
+    forest = pygame.transform.scale(load_image('triredd.jpg'), (WIDTH + 350, HEIGHT + 550))
     intro_text = ['PAUSE']
-    fon = pygame.transform.scale(load_image('grey_pause.png'), (w, h))
+    fon = pygame.transform.scale(load_image('grey_pause.png'), (WIDTH, HEIGHT))
     font = pygame.font.Font(None, 80)
     while running:
-        text_coord = h // 2 - 30
+        text_coord = HEIGHT // 2 - 30
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 terminate()
@@ -213,7 +171,7 @@ def first_level():
             all_sprites.update()
             screen.blit(forest, (-150, 0))
             screen.blit(boiler, (0, boiler_count))
-            if boiler_count > h:
+            if boiler_count > HEIGHT:
                 mario_sprite.draw(screen)
             mario_sprite.update(1)
             all_sprites.draw(screen)
@@ -226,7 +184,7 @@ def first_level():
                 indent_from_right = 53
                 shaking = 0
             for i in range(count_of_hearts + 1):
-                screen.blit(heartimg, (w - indent_from_right, shaking))
+                screen.blit(heartimg, (WIDTH - indent_from_right, shaking))
                 indent_from_right += 60
         pygame.display.flip()
         clock.tick(FPS)
@@ -241,12 +199,12 @@ def main():
     intro_text = ['Побег из ада', 'Начать игру']
     if count_of_hearts == 0:
         game_overing()
-    fon = pygame.transform.scale(load_image('hell.jpg'), (w, h))
+    fon = pygame.transform.scale(load_image('hell.jpg'), (WIDTH, HEIGHT))
     screen.fill((219, 233, 230))
     screen.blit(fon, (0, 0))
     font_intr = pygame.font.Font(None, 60)
     font_basic = pygame.font.Font(None, 40)
-    text_coord = h // 2 - 180
+    text_coord = HEIGHT // 2 - 180
     k = 0
 
     for line in intro_text:
@@ -284,18 +242,18 @@ def intro_first_level():
     global count_of_hearts
     pygame.mouse.set_visible(False)
     # intro_text = []
-    text = pygame.Surface((w, h))
+    text = pygame.Surface((WIDTH, HEIGHT))
     text.set_alpha(0)
     intro_text = ['Начало испытаний начинается', 'С АДСКОГО КОТЛА', 'Правила игры такие',
                   'Огибайте препятствия и доберитесь до поверхности', 'Постарайтесь не умереть, у вас 3 попытки']
     if count_of_hearts == 0:
         game_overing()
-    fon = pygame.transform.scale(load_image('fir.jpg'), (w + 20, h + 20))
+    fon = pygame.transform.scale(load_image('fir.jpg'), (WIDTH + 20, HEIGHT + 20))
     screen.fill((219, 233, 230))
     screen.blit(fon, (-10, 0))
     font_intr = pygame.font.Font(None, 60)
     font_basic = pygame.font.Font(None, 35)
-    text_coord = h // 2 - 180
+    text_coord = HEIGHT // 2 - 180
 
     k = 0
 
@@ -320,7 +278,7 @@ def intro_first_level():
         intro_rect.top = text_coord
         text_coord += intro_rect.height
         text.blit(string_rendered, intro_rect)
-    place = h
+    place = HEIGHT
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -345,13 +303,13 @@ def start_screen():
                   'Постарайтесь не умереть, у вас 3 попытки', 'Кликните любой клавишей']
     if count_of_hearts == 0:
         game_overing()
-    fon = pygame.transform.scale(load_image('ruin.jpg'), (w, h + 50))
+    fon = pygame.transform.scale(load_image('ruin.jpg'), (WIDTH,HEIGHT + 50))
     screen.fill((219, 233, 230))
     screen.blit(fon, (0, 0))
     font_intr = pygame.font.Font(None, 58)
     font_basic = pygame.font.Font(None, 30)
     font_click = pygame.font.Font(None, 19)
-    text_coord = h // 2 - 160
+    text_coord = HEIGHT // 2 - 160
     k = 0
 
     for line in intro_text:
@@ -395,7 +353,7 @@ def start_screen():
 
 
 def game_overing():
-    image = pygame.transform.scale(load_image('overing.png'), (w, h))
+    image = pygame.transform.scale(load_image('overing.png'), (WIDTH, HEIGHT))
     x_poss = -800
     y_poss = 0
     v = 400

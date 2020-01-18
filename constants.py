@@ -39,3 +39,30 @@ x_second_image, y_second_image = x_first_image * 2, 0
 # player_x = 50
 # player_y = 440
 # player = Player(player_x, player_y)
+
+clock = pygame.time.Clock()
+
+x_pos = WIDTH // 2
+y_pos = HEIGHT - 60
+range_between = 40
+running = True
+count = 0
+width_of_rect = 15
+height_of_rect = 80
+width_of_image = 20
+height_of_image = 48
+w_of_monster = 126
+h_of_monster = 252
+FPS = 50
+boiler_count = HEIGHT + 10
+count_of_hearts = 3
+coef_heart = 0
+pause_count = 0
+coef_monster_apdate = 0
+pause = False
+rects = []
+mario_sprite = pygame.sprite.Group()
+all_sprites = pygame.sprite.Group()
+monster_sprites = pygame.sprite.Group()
+
+color = pygame.Color(255, 255, 100)
