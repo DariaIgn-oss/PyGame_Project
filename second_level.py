@@ -1,9 +1,9 @@
 import pygame
 import random
 from Objects import Obstacle, Obstacle_2, Obstacle_3, Obstacle_4, Border
-from SettingsGame import all_sprites, border_sprite, player_sprite, speed_score, screen, WIDTH, HEIGHT
+from settings import objects_sprites, border_sprite, player_sprite, speed_score, screen, WIDTH, HEIGHT
 from Player import Player
-from OddFunctions import terminate, load_image
+from technical_function import terminate, load_image
 from third_level import start
 
 
@@ -36,7 +36,7 @@ def choose_obj(x, y):
 def level():
     global x_first_image, x_second_image, speed_score, progress, x_last_obstacle, speed_koef, multiple_speed, count_obstacles_onlevel
     while running:
-        while len(all_sprites) < count_obstacles_onlevel:
+        while len(objects_sprites) < count_obstacles_onlevel:
             y = random.randint(0, player_y)
             x = WIDTH + random.randint(0, 5) * speed_koef
             progress += 1
@@ -53,11 +53,11 @@ def level():
 
         x_first_image, x_second_image = background_scroll(x_first_image, x_second_image, speed_score.speed)
 
-        all_sprites.update()
+        objects_sprites.update()
         player_sprite.update()
         player_sprite.draw(screen)
 
-        all_sprites.draw(screen)
+        objects_sprites.draw(screen)
 
         font = pygame.font.Font(None, 30)
         text_coord = 50

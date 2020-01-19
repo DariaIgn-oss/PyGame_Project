@@ -1,7 +1,7 @@
 from technical_function import *
-from Sceleton import Sceleton
-from Mist import Mist
-from Platform import start_generate_Platform
+from Objects import Sceleton
+from Objects import Mist
+from Objects import start_generate_platform
 from settings import *
 # from settings import screen, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, \
 #     enemy_sprites
@@ -9,7 +9,7 @@ from settings import *
 
 def engine():
     global FPS, clock, activity, cameray
-    start_generate_Platform()
+    start_generate_platform()
     Sceleton(platforms[1][0], platforms[1][-1] - 45)
     Mist()
     pause = False

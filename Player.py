@@ -1,6 +1,6 @@
 import pygame
-from SettingsGame import player_sprite, border_sprite, all_sprites, screen
-from OddFunctions import terminate
+from settings import player_sprite, border_sprite, objects_sprites, screen
+from technical_function import terminate
 
 
 class Player(pygame.sprite.Sprite):
@@ -30,11 +30,11 @@ class Player(pygame.sprite.Sprite):
                         frame_location, self.rect.size)))
 
     def update(self):
-        for i in all_sprites:
+        for i in objects_sprites:
             if pygame.sprite.collide_mask(self, i):
-                all_sprites.update()
+                objects_sprites.update()
                 player_sprite.draw(screen)
-                all_sprites.draw(screen)
+                objects_sprites.draw(screen)
                 pygame.display.flip()
                 terminate()
 

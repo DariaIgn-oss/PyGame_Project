@@ -19,4 +19,4 @@ def start():
         pygame.display.flip()
         clock.tick(FPS)
 
-# start()
+start()
