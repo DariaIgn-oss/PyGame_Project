@@ -143,7 +143,7 @@ def first_level():
     global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_apdate, fon_count, coef
     flag = True
     heartimg = pygame.transform.scale(load_image('hearted.png'), (55, 55))
-    forest = load_image('frame6.png')
+    forest = load_image('frame4.png')
     intro_text = ['PAUSE']
     first_move = False
     fon = pygame.transform.scale(load_image('grey_pause.png'), (WIDTH, HEIGHT))
@@ -212,7 +212,12 @@ def first_level():
             platfs_sprites.draw(screen)
             monster_sprites.draw(screen)
 
-            fon_count -= 3
+            if fon_count > height_of_fon + HEIGHT:
+                fon_count -= 3
+            if fon_count == height_of_fon + HEIGHT - 1:
+                # заставка следующего уровня
+                pass
+
             if coef_apdate % 7 == 0:
                 indent_from_right = 55
                 shaking = 1
@@ -233,6 +238,8 @@ def terminate():
 
 def main():
     intro_text = ['Побег из ада', 'Начать игру']
+    pygame.mixer.init()
+    # pygame.mixer.Sound('data/menu.wav').play()
     if count_of_hearts == 0:
         game_overing()
     fon = pygame.transform.scale(load_image('hell.jpg'), (WIDTH, HEIGHT))

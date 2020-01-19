@@ -53,6 +53,7 @@ width_of_image = 20
 height_of_image = 48
 w_of_monster = 126
 h_of_monster = 252
+height_of_fon = -13290
 FPS = 50
 boiler_count = HEIGHT + 10
 count_of_hearts = 3
