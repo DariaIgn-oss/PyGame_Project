@@ -5,16 +5,17 @@ from Mist import Mist
 from Platform import start_generate_Platform
 from settings import screen, FPS, clock, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, \
     enemy_sprites, activity, cameray, generation
+from victory import victory
 
 
 def engine():
-    global FPS, clock, activity, cameray
+    global FPS, clock, activity, cameray, generation
     start_generate_Platform()
     Sceleton(platforms[1][0], platforms[1][-1] - 45)
     Mist()
     pause = False
     image_fon = load_image('fon.png')
-    y_pos = -3600
+    y_pos = -600
     image_pause = load_image('pause.png')
     arrow_image = load_image('bone1.png')
     pos = 0, 0
@@ -29,7 +30,7 @@ def engine():
                     sceleton_sprite.update(pos[0])
             if activity and event.type == pygame.MOUSEBUTTONDOWN:
                 sceleton_sprite.update(0, True)
-            if not activity and event.type == pygame.MOUSEBUTTONDOWN:
+            if not activity and event.type == pygame.MOUSEBUTTONDOWN and generation:
                 activity = True
                 pause = False
             elif event.type == pygame.KEYDOWN and event.key == 32:
@@ -40,7 +41,6 @@ def engine():
         sceleton_sprite.draw(screen)
         enemy_sprites.draw(screen)
         shell_sprites.draw(screen)
-        mist_sprite.draw(screen)
         screen.blit(arrow_image, (pos))
         if activity:
             sceleton_sprite.update()
@@ -49,12 +49,14 @@ def engine():
             shell_sprites.update()
             if y_pos < 0:
                 y_pos += cameray
+                mist_sprite.draw(screen)
                 mist_sprite.update()
             else:
-                mist_sprite.kill()
+                victory()
                 generation = False
+                activity = False
             clock.tick(FPS)
-        if pause:
+        if pause and not generation:
             activity = False
             screen.blit(image_pause, (0, 0))
         pygame.display.flip()
