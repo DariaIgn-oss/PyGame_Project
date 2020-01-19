@@ -18,8 +18,6 @@ class Platform(pygame.sprite.Sprite):
     def update(self):
         global rects
         self.rect = self.rect.move(0, self.vy)
-        # for i in range(len(rects)):
-        #     rects[i][-1] += self.vy
         for i in skel_sprite:
             if pygame.sprite.collide_mask(self, i):
                 start_screen()
@@ -128,8 +126,6 @@ def pushing():
         else:
             y = random.randint(-HEIGHT - range_between * i * 2, rects[i - 1][1] - range_between)
         rects.append([x, y])
-        # if i == 249:
-        #     print(rects[i][-1])
         Platform(x, y, height_of_rect, width_of_rect, 5)
     # генерация монстров
     for i in range(7):
@@ -140,12 +136,12 @@ def pushing():
 
 
 def first_level():
-    global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, coef_apdate, fon_count, coef
+    global count, FPS, x_pos, y_pos, boiler_count, coef_heart, pause, pause_count, \
+        coef_apdate, fon_count, first_move, is_move
     flag = True
     heartimg = pygame.transform.scale(load_image('hearted.png'), (55, 55))
     forest = load_image('frame4.png')
     intro_text = ['PAUSE']
-    first_move = False
     fon = pygame.transform.scale(load_image('grey_pause.png'), (WIDTH, HEIGHT))
     font = pygame.font.Font(None, 80)
     while running:
@@ -170,7 +166,7 @@ def first_level():
         if not pause:
             if count % 1000 == 0 and FPS < 110:
                 FPS += 3
-            count += 8
+            count += 10
             is_move = False
 
             coef_apdate += 1
@@ -346,7 +342,7 @@ def start_screen():
                   'Постарайтесь не умереть, у вас 3 попытки', 'Кликните любой клавишей']
     if count_of_hearts == 0:
         game_overing()
-    fon = pygame.transform.scale(load_image('ruin.jpg'), (WIDTH,HEIGHT + 50))
+    fon = pygame.transform.scale(load_image('ruin.jpg'), (WIDTH, HEIGHT + 50))
     screen.fill((219, 233, 230))
     screen.blit(fon, (0, 0))
     font_intr = pygame.font.Font(None, 58)
