@@ -2,7 +2,6 @@ import pygame
 from technical_function import *
 from settings import FPS, clock, activity, screen
 
-
 def game_over():
     image = load_image('game_over.png')
     x_pos = -800
@@ -11,7 +10,7 @@ def game_over():
     screen.blit(image, (x_pos, 0))
     while running:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            if event.type == pygame.QUIT:
                 terminate()
         screen.fill((0, 0, 0))
         if x_pos < 0:
