@@ -4,14 +4,14 @@ from Sceleton import Sceleton
 from Mist import Mist
 from Platform import start_generate_Platform
 from settings import screen, FPS, clock, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, \
-    enemy_sprites
+    enemy_sprites, activity
+
 
 def engine():
-    global FPS, clock
+    global FPS, clock, activity
     start_generate_Platform()
     Sceleton(platforms[1][0], platforms[1][-1] - 45)
     Mist()
-    activity = False
     pause = False
     image_fon = load_image('fon1.png')
     image_pause = load_image('pause.png')

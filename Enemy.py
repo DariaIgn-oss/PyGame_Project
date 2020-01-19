@@ -1,5 +1,5 @@
 import pygame
-from settings import enemy_sprites, shell_sprites, sceleton_sprite, WIDTH, cameray, score
+from settings import enemy_sprites, shell_sprites, WIDTH, cameray, score, platform_sprites
 from technical_function import *
 from Object import Object
 
@@ -22,8 +22,6 @@ class Enemy(Object):
         if pygame.sprite.spritecollideany(self, shell_sprites):
             self.kill()
             score += 10
-        if pygame.sprite.spritecollideany(self, sceleton_sprite):
-            terminate()
 
         if self.is_Jump:
             if self.jump_count >= 0:

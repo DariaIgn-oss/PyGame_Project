@@ -1,12 +1,16 @@
 import pygame
-from settings import sceleton_sprite, platform_sprites, screen, WIDTH, HEIGHT, cameray, score, score_text, font
+from settings import sceleton_sprite, platform_sprites, screen, WIDTH, HEIGHT, cameray, score, font, score_text
+from settings import enemy_sprites
 from technical_function import *
 from Object import Object
 from Shell import Shell
+from game_over import game_over
+
 
 class Sceleton(Object):
     skeleton_image = load_image('skeleton.png')
     skeleton_jump = [load_image('skeleton1.png'), load_image('skeleton2.png'), load_image('skeleton3.png')]
+    game_over = False
 
     def __init__(self, x, y):
         super().__init__(x, y, Sceleton.skeleton_image, sceleton_sprite, 8, 46)
@@ -29,13 +33,15 @@ class Sceleton(Object):
         else:
             score -= 1
 
-        if pygame.sprite.spritecollideany(self, platform_sprites) or self.isJump:
-
+        if (pygame.sprite.spritecollideany(self, platform_sprites) or self.isJump) and not Sceleton.game_over:
             self.isJump = True
             self.image = Sceleton.skeleton_jump[0]
         else:
             self.rect = self.rect.move(0, self.jump_count)
             self.image = Sceleton.skeleton_jump[2]
+
+        if pygame.sprite.spritecollideany(self, enemy_sprites):
+            Sceleton.game_over = True
 
         if x != 0:
             if 0 < x < WIDTH - 24:
@@ -45,7 +51,7 @@ class Sceleton(Object):
             Shell(self.rect.x, self.rect.y)
 
         if self.rect.y + 25 >= HEIGHT:
-            terminate()
+            game_over()
 
         if int(score_text) < score:
             score_text = str(score)

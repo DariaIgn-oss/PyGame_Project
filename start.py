@@ -1,10 +1,13 @@
 import pygame
 from engine import engine
-from settings import screen, FPS, clock
+from settings import screen, FPS, clock, activity
 from technical_function import *
 
+pygame.mixer.music.load('music\\music.mp3')
+pygame.mixer.music.play()
+
 def start():
-    global FPS, clock
+    global FPS, clock, activity
     fon = load_image('headpiece.png')
     screen.blit(fon, (0, 0))
     while True:

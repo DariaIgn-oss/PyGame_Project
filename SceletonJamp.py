@@ -22,6 +22,8 @@ font = pygame.font.Font(None, 36)
 FPS = 25
 clock = pygame.time.Clock()
 
+activity = False
+
 
 def terminate():
     pygame.quit()
@@ -63,6 +65,7 @@ class Object(pygame.sprite.Sprite):
 class Sceleton(Object):
     skeleton_image = load_image('skeleton.png')
     skeleton_jump = [load_image('skeleton1.png'), load_image('skeleton2.png'), load_image('skeleton3.png')]
+    game_over = False
 
     def __init__(self, x, y):
         super().__init__(x, y, Sceleton.skeleton_image, sceleton_sprite, 8, 46)
@@ -85,13 +88,15 @@ class Sceleton(Object):
         else:
             score -= 1
 
-        if pygame.sprite.spritecollideany(self, platform_sprites) or self.isJump:
-
+        if (pygame.sprite.spritecollideany(self, platform_sprites) or self.isJump) and not Sceleton.game_over:
             self.isJump = True
             self.image = Sceleton.skeleton_jump[0]
         else:
             self.rect = self.rect.move(0, self.jump_count)
             self.image = Sceleton.skeleton_jump[2]
+
+        if pygame.sprite.spritecollideany(self, enemy_sprites):
+            Sceleton.game_over = True
 
         if x != 0:
             if 0 < x < WIDTH - 24:
@@ -101,7 +106,7 @@ class Sceleton(Object):
             Shell(self.rect.x, self.rect.y)
 
         if self.rect.y + 25 >= HEIGHT:
-            terminate()
+            game_over()
 
         if int(score_text) < score:
             score_text = str(score)
@@ -188,8 +193,6 @@ class Enemy(Object):
         if pygame.sprite.spritecollideany(self, shell_sprites):
             self.kill()
             score += 10
-        if pygame.sprite.spritecollideany(self, sceleton_sprite):
-            terminate()
 
         if self.is_Jump:
             if self.jump_count >= 0:
@@ -201,11 +204,10 @@ class Enemy(Object):
 
 
 def engine():
-    global FPS, clock
+    global FPS, clock, activity
     start_generate_Platform()
     Sceleton(platforms[1][0], platforms[1][-1] - 45)
     Mist()
-    activity = False
     pause = False
     image_fon = load_image('fon1.png')
     image_pause = load_image('pause.png')
@@ -260,6 +262,17 @@ def start():
                 engine()
         pygame.display.flip()
         clock.tick(FPS)
+
+def game_over():
+    global FPS, clock, activity
+    fon = load_image('game_over.png')
+    screen.blit(fon, (0, 0))
+    activity = False
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+        pygame.display.flip()
 
 
 start()
