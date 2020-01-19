@@ -13,7 +13,6 @@ fps = 20
 clock = pygame.time.Clock()
 speed_koef = 50
 count_obstacles_onlevel = 3
-# jump = pygame.mixer.music.load('data/level_audio.wav')
 multiple_speed = True
 progress = 0
 
@@ -22,12 +21,12 @@ running = True
 
 def choose_obj(x, y):
     level = 0
-    if progress > 20:
+    if progress > 30:
         level = 3
-    elif progress > 30:
+    elif progress > 20:
         level = 2
     elif progress > 10:
-        level = 1
+        level = 3
     number = random.randint(0, level)
     dct = {0: Obstacle, 1: Obstacle_2, 2: Obstacle_3, 3: Obstacle_4}
     return dct[number](x, y)
@@ -48,9 +47,6 @@ def level():
                 terminate()
 
         if pygame.key.get_pressed()[273]:
-            # pygame.mixer.music.load('data/jump.wav')
-            # pygame.mixer.music.play()
-            # pygame.mixer.Sound('data/jump.wav').play()
             player.jump = True
             player.speed = 3
 

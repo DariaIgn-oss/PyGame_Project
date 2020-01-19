@@ -53,10 +53,10 @@ class Obstacle_4(ObstacleMain):
         super().__init__(all_sprites, x, y, load_image(r'Obstacles\4.png'), 1, 1)
 
     def property(self):
-        self.random_shoot_coord = random.randint(250, 400)
+        self.random_shoot_coord = random.randint(300, 500)
         if self.rect.x > self.random_shoot_coord:
             self.shoot = False
-        if self.rect.x <= self.random_shoot_coord and not self.shoot:
+        if self.rect.x < self.random_shoot_coord and not self.shoot:
             Spear(self.rect.x, self.rect.y)
             self.shoot = True
 
@@ -100,7 +100,7 @@ class Spear(pygame.sprite.Sprite):
         self.image = load_image('spear.png')
         self.rect = self.image.get_rect()
         self.rect = self.rect.move(x, y)
-        self.speed_y = 1
+        self.speed_y = 2
 
     def update(self, *args):
         self.rect.x -= speed_score.speed + speed_score.speed // 2
@@ -108,3 +108,5 @@ class Spear(pygame.sprite.Sprite):
             self.rect.y -= (self.speed_y ** 3)
         else:
             self.rect.y += (self.speed_y ** 2)
+        if self.rect.x < -self.image.get_size()[0]:
+            self.remove(all_sprites)

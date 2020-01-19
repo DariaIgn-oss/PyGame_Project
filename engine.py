@@ -13,7 +13,7 @@ def engine():
     Sceleton(platforms[1][0], platforms[1][-1] - 45)
     Mist()
     pause = False
-    image_fon = load_image('fon.png')
+    image_fon = load_image('fon1.png')
     y_pos = -3600
     image_pause = load_image('pause.png')
     arrow_image = load_image('bone1.png')
