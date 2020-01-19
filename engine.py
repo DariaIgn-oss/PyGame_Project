@@ -1,10 +1,10 @@
-import pygame
 from technical_function import *
 from Sceleton import Sceleton
 from Mist import Mist
 from Platform import start_generate_Platform
-from settings import screen, FPS, clock, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, \
-    enemy_sprites, activity, cameray, generation
+from settings import *
+# from settings import screen, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, \
+#     enemy_sprites
 
 
 def engine():

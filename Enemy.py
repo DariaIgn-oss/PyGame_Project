@@ -1,5 +1,4 @@
-import pygame
-from settings import enemy_sprites, shell_sprites, WIDTH, cameray, score, platform_sprites
+from settings import enemy_sprites, shell_sprites, platform_sprites
 from technical_function import *
 from Object import Object
 

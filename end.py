@@ -1,6 +1,5 @@
-import pygame
 from technical_function import *
-from settings import FPS, clock, activity, screen
+from settings import screen
 
 
 def end():

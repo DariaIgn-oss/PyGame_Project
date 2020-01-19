@@ -1,12 +1,12 @@
-import pygame
 from engine import engine
-from settings import screen, FPS, clock, activity
+from settings import *
 from technical_function import *
 
-pygame.mixer.music.load('music\\music.mp3')
-pygame.mixer.music.play()
+
 
 def start():
+    pygame.mixer.music.load('music\\music.mp3')
+    pygame.mixer.music.play()
     global FPS, clock, activity
     fon = load_image('headpiece2.png')
     screen.blit(fon, (0, 0))
@@ -19,4 +19,4 @@ def start():
         pygame.display.flip()
         clock.tick(FPS)
 
-start()
+# start()

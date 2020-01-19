@@ -4,6 +4,7 @@ from Objects import Obstacle, Obstacle_2, Obstacle_3, Obstacle_4, Border
 from SettingsGame import all_sprites, border_sprite, player_sprite, speed_score, screen, WIDTH, HEIGHT
 from Player import Player
 from OddFunctions import terminate, load_image
+from third_level import start
 
 
 pygame.init()
@@ -88,6 +89,9 @@ def progress_counter():
         multiple_speed = True
     if progress % 50 == 0 and count_obstacles_onlevel < 8:
         count_obstacles_onlevel += 1
+    if progress == 10:
+        pygame.mixer.stop()
+        start()
 
 
 def background_scroll(x1, x2, speed=5):
@@ -111,7 +115,7 @@ x_first_image, y_first_image = WIDTH, 0
 x_second_image, y_second_image = x_first_image * 2, 0
 
 
-def start_screen():
+def start_screen2():
     intro_text = ["ЗАСТАВКА", "",
                   "Правила игры",
                   "Если в правилах несколько строк,",
@@ -146,4 +150,4 @@ player_y = 440
 Border()
 player = Player(player_x, player_y, load_image(r"Hero\skeletonBase.png"), 10, 6)  # magic numbers, must fix
 
-start_screen()
+# start_screen2()

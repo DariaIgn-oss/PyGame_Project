@@ -2,6 +2,7 @@ import random
 import sys
 from constants import *
 from loading_image import load_image
+from second_level import start_screen2
 
 
 class Platform(pygame.sprite.Sprite):
@@ -18,9 +19,9 @@ class Platform(pygame.sprite.Sprite):
     def update(self):
         global rects
         self.rect = self.rect.move(0, self.vy)
-        for i in skel_sprite:
-            if pygame.sprite.collide_mask(self, i):
-                start_screen()
+        # for i in skel_sprite:
+        #     if pygame.sprite.collide_mask(self, i):
+        #         start_screen()
 
 
 class Skel(pygame.sprite.Sprite):
@@ -84,9 +85,9 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(0, 17)
         self.mask = pygame.mask.from_surface(self.image)
-        for i in skel_sprite:
-            if pygame.sprite.collide_mask(self, i):
-                start_screen()
+        # for i in skel_sprite:
+        #     if pygame.sprite.collide_mask(self, i):
+        #         start_screen()
 
 
 pygame.init()
@@ -210,9 +211,9 @@ def first_level():
 
             if fon_count > height_of_fon + HEIGHT:
                 fon_count -= 3
-            if fon_count == height_of_fon + HEIGHT - 1:
+            if fon_count == height_of_fon + HEIGHT:
+                start_screen2()
                 # заставка следующего уровня
-                pass
 
             if coef_apdate % 7 == 0:
                 indent_from_right = 55

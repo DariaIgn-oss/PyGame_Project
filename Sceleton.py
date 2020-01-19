@@ -1,6 +1,5 @@
-import pygame
-from settings import sceleton_sprite, platform_sprites, screen, WIDTH, HEIGHT, cameray, score, font, score_text
-from settings import enemy_sprites
+from settings import sceleton_sprite, platform_sprites, screen
+from settings import *
 from technical_function import *
 from Object import Object
 from Shell import Shell

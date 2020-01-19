@@ -1,6 +1,6 @@
 import random
 from technical_function import load_image
-from settings import platforms, cameray, HEIGHT, count_platforms, platform_sprites, generation
+from settings import *
 from Object import Object
 from Enemy import Enemy
 from end import end
