@@ -15,7 +15,7 @@ def engine():
     Mist()
     pause = False
     image_fon = load_image('fon.png')
-    y_pos = -3600
+    y_pos = -3600 # начальная позиция
     image_pause = load_image('pause.png')
     arrow_image = load_image('bone1.png')
     pos = 0, 0
