@@ -24,7 +24,7 @@ class Platform(Object):
             Platform.platforms_image.append(load_image('platform3.png'))
         if count_platforms > 10 and count_platforms % divider == 0:
             Enemy(platforms[-1][0] + 5, platforms[-1][1] - 35)
-        if count_platforms > 300:
+        if count_platforms > 500:
             Platform.platforms_image = [load_image('platform3.png')]
         platform_image = random.choice(Platform.platforms_image)
         super().__init__(x, y, platform_image, platform_sprites)

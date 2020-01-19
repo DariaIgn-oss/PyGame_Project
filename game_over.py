@@ -4,12 +4,17 @@ from settings import FPS, clock, activity, screen
 
 
 def game_over():
-    global FPS, clock, activity
-    fon = load_image('game_over.png')
-    screen.blit(fon, (0, 0))
-    activity = False
-    while True:
+    image = load_image('game_over.png')
+    x_pos = -800
+    v = 400
+    running = True
+    screen.blit(image, (x_pos, 0))
+    while running:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 terminate()
+        screen.fill((0, 0, 0))
+        if x_pos < 0:
+            x_pos += v * clock.tick() / 1000
+        screen.blit(image, (int(x_pos), 0))
         pygame.display.flip()

@@ -204,12 +204,13 @@ class Enemy(Object):
 
 
 def engine():
-    global FPS, clock, activity
+    global FPS, clock, activity, cameray
     start_generate_Platform()
     Sceleton(platforms[1][0], platforms[1][-1] - 45)
     Mist()
     pause = False
-    image_fon = load_image('fon1.png')
+    image_fon = load_image('fon.png')
+    y_pos = -3600
     image_pause = load_image('pause.png')
     arrow_image = load_image('bone1.png')
     pos = 0, 0
@@ -230,7 +231,7 @@ def engine():
             elif event.type == pygame.KEYDOWN and event.key == 32:
                 pause = True
         screen.fill((0, 0, 0))
-        screen.blit(image_fon, (0, 0))
+        screen.blit(image_fon, (0, y_pos))
         platform_sprites.draw(screen)
         sceleton_sprite.draw(screen)
         enemy_sprites.draw(screen)
@@ -238,6 +239,8 @@ def engine():
         mist_sprite.draw(screen)
         screen.blit(arrow_image, (pos))
         if activity:
+            if y_pos < 0:
+                y_pos += cameray
             sceleton_sprite.update()
             platform_sprites.update()
             enemy_sprites.update()

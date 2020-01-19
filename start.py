@@ -8,7 +8,7 @@ pygame.mixer.music.play()
 
 def start():
     global FPS, clock, activity
-    fon = load_image('headpiece.png')
+    fon = load_image('headpiece2.png')
     screen.blit(fon, (0, 0))
     while True:
         for event in pygame.event.get():

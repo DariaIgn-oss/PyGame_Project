@@ -4,16 +4,17 @@ from Sceleton import Sceleton
 from Mist import Mist
 from Platform import start_generate_Platform
 from settings import screen, FPS, clock, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, \
-    enemy_sprites, activity
+    enemy_sprites, activity, cameray, generation
 
 
 def engine():
-    global FPS, clock, activity
+    global FPS, clock, activity, cameray
     start_generate_Platform()
     Sceleton(platforms[1][0], platforms[1][-1] - 45)
     Mist()
     pause = False
-    image_fon = load_image('fon1.png')
+    image_fon = load_image('fon.png')
+    y_pos = -3600
     image_pause = load_image('pause.png')
     arrow_image = load_image('bone1.png')
     pos = 0, 0
@@ -34,7 +35,7 @@ def engine():
             elif event.type == pygame.KEYDOWN and event.key == 32:
                 pause = True
         screen.fill((0, 0, 0))
-        screen.blit(image_fon, (0, 0))
+        screen.blit(image_fon, (0, y_pos))
         platform_sprites.draw(screen)
         sceleton_sprite.draw(screen)
         enemy_sprites.draw(screen)
@@ -46,7 +47,12 @@ def engine():
             platform_sprites.update()
             enemy_sprites.update()
             shell_sprites.update()
-            mist_sprite.update()
+            if y_pos < 0:
+                y_pos += cameray
+                mist_sprite.update()
+            else:
+                mist_sprite.kill()
+                generation = False
             clock.tick(FPS)
         if pause:
             activity = False
