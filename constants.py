@@ -9,10 +9,10 @@ clock = pygame.time.Clock()
 running = True
 
 fps = 30
-border_sprite = pygame.sprite.Group()
-all_sprites = pygame.sprite.Group()
-enemy_sprite = pygame.sprite.Group()
-player_sprite = pygame.sprite.Group()
+# border_sprite = pygame.sprite.Group()
+# all_sprites = pygame.sprite.Group()
+# enemy_sprite = pygame.sprite.Group()
+# player_sprite = pygame.sprite.Group()
 width_obstacle = 50
 width_obstacle_2 = 30
 height_obstacle_2 = 50

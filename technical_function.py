@@ -1,6 +1,8 @@
 import pygame
 import sys
 import os
+from settings import objects_sprites, speed_score
+
 
 def terminate():
     pygame.quit()
@@ -17,3 +19,12 @@ def load_image(name, colorkey=None):
     else:
         image = image
     return image
+
+
+def restart_level3():
+    global objects_sprites, speed_score
+    for i in objects_sprites:
+        objects_sprites.remove(i)
+    # objects_sprites.clear()
+    speed_score.speed = 10
+    speed_score.score = 0

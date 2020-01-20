@@ -1,6 +1,7 @@
 import pygame
 from settings import player_sprite, border_sprite, objects_sprites, screen
-from technical_function import terminate
+from technical_function import terminate, restart_level3
+# from second_level import start_screen2
 
 
 class Player(pygame.sprite.Sprite):
@@ -36,7 +37,9 @@ class Player(pygame.sprite.Sprite):
                 player_sprite.draw(screen)
                 objects_sprites.draw(screen)
                 pygame.display.flip()
-                terminate()
+                restart_level3()
+                start_screen2()
+                # terminate()
 
         if not self.jump:
             self.cur_frame = (self.cur_frame + 1) % len(self.walk)

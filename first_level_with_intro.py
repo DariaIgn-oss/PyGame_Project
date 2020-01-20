@@ -19,9 +19,9 @@ class Platform(pygame.sprite.Sprite):
     def update(self):
         global rects
         self.rect = self.rect.move(0, self.vy)
-        # for i in skel_sprite:
-        #     if pygame.sprite.collide_mask(self, i):
-        #         start_screen()
+        for i in skel_sprite:
+            if pygame.sprite.collide_mask(self, i):
+                start_screen()
 
 
 class Skel(pygame.sprite.Sprite):
@@ -85,9 +85,9 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(0, 17)
         self.mask = pygame.mask.from_surface(self.image)
-        # for i in skel_sprite:
-        #     if pygame.sprite.collide_mask(self, i):
-        #         start_screen()
+        for i in skel_sprite:
+            if pygame.sprite.collide_mask(self, i):
+                start_screen()
 
 
 pygame.init()
@@ -212,8 +212,9 @@ def first_level():
             if fon_count > height_of_fon + HEIGHT:
                 fon_count -= 3
             if fon_count == height_of_fon + HEIGHT:
-                start_screen2()
                 # заставка следующего уровня
+                pygame.mixer.music.stop()
+                start_screen2()
 
             if coef_apdate % 7 == 0:
                 indent_from_right = 55
@@ -233,10 +234,11 @@ def terminate():
     sys.exit()
 
 
-def main():
+def mainn():
     intro_text = ['Побег из ада', 'Начать игру']
     pygame.mixer.init()
-    # pygame.mixer.Sound('data/menu.wav').play()
+    pygame.mixer.music.load('music\\menu.mp3')
+    pygame.mixer.music.play(-1)
     if count_of_hearts == 0:
         game_overing()
     fon = pygame.transform.scale(load_image('hell.jpg'), (WIDTH, HEIGHT))
@@ -406,7 +408,7 @@ def game_overing():
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 pygame.mouse.set_visible(True)
                 hearts()
-                main()
+                mainn()
         screen.fill((0, 0, 0))
         if x_poss < 0:
             x_poss += v * clock.tick() / 1000
@@ -414,4 +416,4 @@ def game_overing():
         pygame.display.flip()
 
 
-main()
+mainn()
