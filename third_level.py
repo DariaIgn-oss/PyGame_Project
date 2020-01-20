@@ -5,7 +5,7 @@ from technical_function import *
 
 
 def start():
-    pygame.mixer.music.load('music\\music.mp3')
+    pygame.mixer.music.load('music\\third_level.mp3')
     pygame.mixer.music.play()
     global FPS, clock, activity
     fon = load_image('headpiece2.png')

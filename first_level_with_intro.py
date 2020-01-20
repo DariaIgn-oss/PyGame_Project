@@ -283,43 +283,10 @@ def mainn():
 def intro_first_level():
     global count_of_hearts
     pygame.mouse.set_visible(False)
-    # intro_text = []
-    text = pygame.Surface((WIDTH, HEIGHT))
-    text.set_alpha(0)
-    intro_text = ['Начало испытаний начинается', 'С АДСКОГО КОТЛА', 'Правила игры такие',
-                  'Огибайте препятствия и доберитесь до поверхности', 'Постарайтесь не умереть, у вас 3 попытки']
     if count_of_hearts == 0:
         game_overing()
-    fon = pygame.transform.scale(load_image('fir.jpg'), (WIDTH + 20, HEIGHT + 20))
+    fon = pygame.transform.scale(load_image('inter.png'), (WIDTH + 20, HEIGHT + 20))
     screen.fill((219, 233, 230))
-    screen.blit(fon, (-10, 0))
-    font_intr = pygame.font.Font(None, 60)
-    font_basic = pygame.font.Font(None, 35)
-    text_coord = HEIGHT // 2 - 180
-
-    k = 0
-
-    for line in intro_text:
-        if k == 0 or k == 1 or k == 2:
-            string_rendered = font_intr.render(line, 1, pygame.Color(180, 180, 180))
-        else:
-            string_rendered = font_basic.render(line, 1, pygame.Color(180, 180, 180))
-        intro_rect = string_rendered.get_rect()
-        if k == 0:
-            intro_rect.x = 100
-            text_coord += 80
-        elif k == 1 or k == 2:
-            intro_rect.x = 220
-            text_coord += 40
-        else:
-            intro_rect.x = 100
-            text_coord += 20
-        string_rendered = font_intr.render(line, 1, pygame.Color(180, 180, 180))
-        intro_rect = string_rendered.get_rect()
-        k += 1
-        intro_rect.top = text_coord
-        text_coord += intro_rect.height
-        text.blit(string_rendered, intro_rect)
     place = HEIGHT
     while True:
         for event in pygame.event.get():
@@ -329,11 +296,11 @@ def intro_first_level():
                 count_of_hearts -= 1
                 pushing()
                 first_level()
-        screen.blit(text, (0, place))
         if place <= 0:
             place = 0
         else:
             place -= 1
+        screen.blit(fon, (-10, 0))
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -348,8 +315,8 @@ def start_screen():
     fon = pygame.transform.scale(load_image('ruin.jpg'), (WIDTH, HEIGHT + 50))
     screen.fill((219, 233, 230))
     screen.blit(fon, (0, 0))
-    font_intr = pygame.font.Font(None, 58)
-    font_basic = pygame.font.Font(None, 30)
+    font_intr = pygame.font.Font(None, 40)
+    font_basic = pygame.font.Font(None, 25)
     font_click = pygame.font.Font(None, 19)
     text_coord = HEIGHT // 2 - 160
     k = 0

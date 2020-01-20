@@ -101,6 +101,7 @@ def choose_obj(x, y):
 
 def level():
     global x_first_image, x_second_image, speed_score, progress, x_last_obstacle, speed_koef, multiple_speed, count_obstacles_onlevel, pause
+    pygame.mouse.set_visible(False)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -114,13 +115,6 @@ def level():
                 progress += 1
                 choose_obj(x, y)
             pygame.display.update()
-
-
-
-            # print(pygame.key)
-            # if pygame.key.get_pressed()[pygame.K_ESCAPE]:
-            #     pause = not pause
-
             if pygame.key.get_pressed()[273]:
                 player.jump = True
                 player.speed = 3
@@ -128,8 +122,9 @@ def level():
             x_first_image, x_second_image = background_scroll(x_first_image, x_second_image, speed_score.speed)
 
             objects_sprites.update()
-            player_sprite.update()
-            player_sprite.draw(screen)
+            if not (x_first_image > player_x and x_second_image > player_x):
+                player_sprite.update()
+                player_sprite.draw(screen)
 
             objects_sprites.draw(screen)
 
@@ -190,21 +185,20 @@ x_second_image, y_second_image = x_first_image * 2, 0
 
 
 def start_screen2():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
+    intro_text = ["Вы выбрались из котла!", "",
+                  "Теперь вам нужно пробежать мимо чертовых руин!",
+                  "Для начала игры нажмите SPACE"]
 
-    fon = pygame.transform.scale(load_image('fon.jpg'), (WIDTH, HEIGHT))
+    fon = pygame.transform.scale(load_image('fon2.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
     for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
+        string_rendered = font.render(line, 1, pygame.Color('white'))
         intro_rect = string_rendered.get_rect()
         text_coord += 10
         intro_rect.top = text_coord
-        intro_rect.x = 10
+        intro_rect.x = 100
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
 
@@ -224,5 +218,5 @@ player_y = 440
 Border()
 player = Player(player_x, player_y, load_image(r"Hero\skeletonBase.png"), 10, 6)  # magic numbers, must fix
 
-# start_screen2()
+start_screen2()
 

@@ -1,9 +1,7 @@
 import pygame
 import random
-# from settings import sceleton_sprite, platform_sprites, screen
 from settings import *
 from game_over import game_over
-# from settings import objects_sprites, border_sprite, player_sprite, speed_score, enemy_sprites, platform_sprites, shell_sprites, mist_sprite, s
 from technical_function import load_image
 from end import end
 clock = pygame.time.Clock()
