@@ -1,8 +1,6 @@
-import pygame
 from technical_function import *
 from Objects import Mist, Sceleton, start_generate_platform
-from settings import screen, FPS, clock, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, \
-    enemy_sprites, activity, cameray, generation
+from settings import screen, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, enemy_sprites
 from victory import victory
 
 

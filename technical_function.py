@@ -22,9 +22,8 @@ def load_image(name, colorkey=None):
 
 
 def restart_level3():
-    global objects_sprites, speed_score
+    objects_sprites, speed_score
     for i in objects_sprites:
         objects_sprites.remove(i)
-    # objects_sprites.clear()
     speed_score.speed = 10
     speed_score.score = 0

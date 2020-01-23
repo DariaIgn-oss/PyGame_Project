@@ -1,4 +1,3 @@
-import pygame
 import random
 from settings import *
 from game_over import game_over
