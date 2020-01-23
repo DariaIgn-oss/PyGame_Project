@@ -19,4 +19,4 @@ def start():
         clock.tick(FPS)
 
 
-start()
+# start()

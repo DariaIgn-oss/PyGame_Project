@@ -235,4 +235,4 @@ Border()
 animation_rows = 10
 animation_columns = 6
 player = Player(player_x, player_y, load_image(r"Hero\skeletonBase.png"), animation_rows, animation_columns)
-start_screen2()
+# start_screen2()
