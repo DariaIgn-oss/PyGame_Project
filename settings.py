@@ -26,9 +26,6 @@ FPS = 25
 clock = pygame.time.Clock()
 
 
-
-
-
 class SpeedScore:
     def __init__(self, speed, score):
         self.speed = speed

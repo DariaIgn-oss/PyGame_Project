@@ -3,7 +3,6 @@ from settings import *
 from technical_function import *
 
 
-
 def start():
     pygame.mixer.music.load('music\\third_level.mp3')
     pygame.mixer.music.play()
@@ -18,5 +17,6 @@ def start():
                 engine()
         pygame.display.flip()
         clock.tick(FPS)
+
 
 start()

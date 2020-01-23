@@ -1,4 +1,5 @@
 import pygame
+
 # from Player import Player
 
 # Общие константы
@@ -25,10 +26,6 @@ x_last_obstacle = 0
 count_obstacles_onlevel = 3
 multiple_speed = True
 progress = 0
-
-
-
-
 
 x_first_image, y_first_image = WIDTH, 0
 x_second_image, y_second_image = x_first_image * 2, 0

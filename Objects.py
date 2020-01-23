@@ -3,7 +3,7 @@ import random
 from settings import *
 from game_over import game_over
 from technical_function import load_image
-from end import end
+
 clock = pygame.time.Clock()
 
 
@@ -257,7 +257,7 @@ class Platform(Object):
     def __init__(self, x=-80, y=-18):
         global platforms
         divider = random.randint(1, 11)
-        if count_platforms > 1 and  count_platforms % 10 == 0:
+        if count_platforms > 1 and count_platforms % 10 == 0:
             Platform.platforms_image.append(load_image('platform3.png'))
         if count_platforms > 10 and count_platforms % divider == 0:
             Enemy(platforms[-1][0] + 5, platforms[-1][1] - 35)

@@ -2,8 +2,9 @@ import pygame
 from technical_function import *
 from settings import FPS, clock, activity, screen
 
+
 def victory():
-    victory = load_image('victory.png')
+    victory_image = load_image('victory.png')
     x_pos = -800
     v = 400
     running = True
@@ -15,5 +16,5 @@ def victory():
         screen.fill((255, 255, 255))
         if x_pos < 0:
             x_pos += v * clock.tick() / 1000
-        screen.blit(victory, (int(x_pos), 0))
+        screen.blit(victory_image, (int(x_pos), 0))
         pygame.display.flip()

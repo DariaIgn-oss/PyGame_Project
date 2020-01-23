@@ -13,7 +13,7 @@ def engine():
     Mist()
     pause = False
     image_fon = load_image('fon.png')
-    y_pos = -1200 # начальная позиция
+    y_pos = -1200  # начальная позиция
     image_pause = load_image('pause.png')
     arrow_image = load_image('bone1.png')
     pos = 0, 0

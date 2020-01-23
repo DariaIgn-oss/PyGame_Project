@@ -1,6 +1,7 @@
 from technical_function import *
 from settings import clock, screen
 
+
 def game_over():
     image = load_image('game_over.png')
     x_pos = -800
