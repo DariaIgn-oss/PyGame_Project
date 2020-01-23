@@ -1,8 +1,9 @@
-import pygame
 import random
+
+import pygame
+
 from Objects import Obstacle, Obstacle_2, Obstacle_3, Obstacle_4, Border
-from settings import objects_sprites, border_sprite, player_sprite, speed_score, screen, WIDTH, HEIGHT
-# from Player import Player
+from settings import objects_sprites, border_sprite, player_sprite, screen, HEIGHT, WIDTH, speed_score
 from technical_function import terminate, load_image, restart_level3
 from third_level import start
 
@@ -81,7 +82,7 @@ clock = pygame.time.Clock()
 speed_koef = 50
 count_obstacles_onlevel = 3
 multiple_speed = True
-progress = 0
+progress = 1
 
 running = True
 
@@ -102,18 +103,33 @@ def choose_obj(x, y):
 def level():
     global x_first_image, x_second_image, speed_score, progress, x_last_obstacle, speed_koef, multiple_speed, count_obstacles_onlevel, pause
     pygame.mouse.set_visible(False)
+    intro_text = ['PAUSE']
+    pause_fon = pygame.Surface((WIDTH, HEIGHT))
+    pause_fon.convert_alpha(pause_fon)
+    pause_fon.set_alpha(2)
+    font = pygame.font.Font(None, 80)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 pause = not pause
+        if pause:
+            for line in intro_text:
+                string_rendered = font.render(line, 1, pygame.Color(255, 255, 255))
+                intro_rect = string_rendered.get_rect()
+                intro_rect.x = WIDTH // 2 - 40
+                intro_rect.top = HEIGHT // 2
+                screen.blit(string_rendered, intro_rect)
+            screen.blit(pause_fon, (0, 0))
+            pygame.display.flip()
         if not pause:
-            while len(objects_sprites) < count_obstacles_onlevel:
-                y = random.randint(0, player_y)
-                x = WIDTH + random.randint(0, 5) * speed_koef
-                progress += 1
-                choose_obj(x, y)
+            if not (x_first_image > 0 and x_second_image > 0):
+                while len(objects_sprites) < count_obstacles_onlevel:
+                    y = random.randint(0, player_y)
+                    x = WIDTH + random.randint(0, 5) * speed_koef
+                    progress += 1
+                    choose_obj(x, y)
             pygame.display.update()
             if pygame.key.get_pressed()[273]:
                 player.jump = True
@@ -156,7 +172,7 @@ def progress_counter():
         multiple_speed = False
     elif progress % 15 == 1:
         multiple_speed = True
-    if progress % 50 == 0 and count_obstacles_onlevel < 8:
+    if progress % 15 == 0 and count_obstacles_onlevel < 6:
         count_obstacles_onlevel += 1
     if progress == 50:
         pygame.mixer.stop()
@@ -187,7 +203,7 @@ x_second_image, y_second_image = x_first_image * 2, 0
 def start_screen2():
     intro_text = ["Вы выбрались из котла!", "",
                   "Теперь вам нужно пробежать мимо чертовых руин!",
-                  "Для начала игры нажмите SPACE"]
+                  "Для начала игры нажмите 1"]
 
     fon = pygame.transform.scale(load_image('fon2.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
@@ -206,7 +222,7 @@ def start_screen2():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_1:
                 pygame.mixer.Sound('data/level_audio.wav').play()
                 level()  # начинаем игру
         pygame.display.flip()
@@ -216,7 +232,7 @@ def start_screen2():
 player_x = 50
 player_y = 440
 Border()
-player = Player(player_x, player_y, load_image(r"Hero\skeletonBase.png"), 10, 6)  # magic numbers, must fix
-
+animation_rows = 10
+animation_columns = 6
+player = Player(player_x, player_y, load_image(r"Hero\skeletonBase.png"), animation_rows, animation_columns)
 start_screen2()
-

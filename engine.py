@@ -1,8 +1,6 @@
 import pygame
 from technical_function import *
-from Sceleton import Sceleton
 from Objects import Mist, Sceleton, start_generate_platform
-# from Platform import start_generate_Platform
 from settings import screen, FPS, clock, platforms, sceleton_sprite, platform_sprites, mist_sprite, shell_sprites, \
     enemy_sprites, activity, cameray, generation
 from victory import victory
@@ -15,7 +13,7 @@ def engine():
     Mist()
     pause = False
     image_fon = load_image('fon.png')
-    y_pos = -3600 # начальная позиция
+    y_pos = -1200 # начальная позиция
     image_pause = load_image('pause.png')
     arrow_image = load_image('bone1.png')
     pos = 0, 0
