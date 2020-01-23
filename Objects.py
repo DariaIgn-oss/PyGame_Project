@@ -277,6 +277,3 @@ class Platform(Object):
             Platform(platforms[-1][0], platforms[-1][1])
             platforms.pop(0)
             count_platforms += 1
-
-        if count_platforms == 1000:
-            end()
