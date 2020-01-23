@@ -172,7 +172,7 @@ def progress_counter():
         multiple_speed = False
     elif progress % 15 == 1:
         multiple_speed = True
-    if progress % 15 == 0 and count_obstacles_onlevel < 6:
+    if progress % 15 == 0 and count_obstacles_onlevel < 5:
         count_obstacles_onlevel += 1
     if progress == 50:
         pygame.mixer.stop()

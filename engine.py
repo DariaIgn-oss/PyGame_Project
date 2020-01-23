@@ -31,7 +31,7 @@ def engine():
             if not activity and event.type == pygame.MOUSEBUTTONDOWN and generation:
                 activity = True
                 pause = False
-            elif event.type == pygame.KEYDOWN and event.key == 32:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 pause = True
         screen.fill((0, 0, 0))
         screen.blit(image_fon, (0, y_pos))
@@ -54,7 +54,7 @@ def engine():
                 generation = False
                 activity = False
             clock.tick(FPS)
-        if pause and not generation:
+        if pause and generation:
             activity = False
             screen.blit(image_pause, (0, 0))
         pygame.display.flip()
